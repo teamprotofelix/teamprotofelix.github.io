@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>골프스윙폼코치 - 무결점 버전 4.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #228B22 0%, #32CD32 50%, #90EE90 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .upload-zone {
+            border: 3px dashed #FFD700;
+            border-radius: 20px;
+            width: 100%; max-width: 600px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255,255,255,0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .upload-zone:hover, .upload-zone.dragover { 
+            background: rgba(255,215,0,0.2); 
+            border-color: #FFA500;
+            transform: scale(1.02);
+        }
+        .upload-zone i { font-size: 4em; color: #228B22; margin-bottom: 10px; }
+        .upload-zone input[type="file"] { display: none; }
+        .previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        .preview-container {
+            position: relative;
+        }
+        .preview-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border: 2px solid #90EE90;
+        }
+        .preview-img.error { border-color: #dc3545; opacity: 0.7; }
+        .analyze-btn, .test-btn, .clear-btn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            margin: 5px;
+        }
+        .analyze-btn:hover, .test-btn:hover, .clear-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .result {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+        }
+        .result h2 { color: #228B22; font-family: 'Playfair Display', serif; margin-bottom: 20px; text-align: center; }
+        .result-section { margin-bottom: 25px; padding: 20px; background: linear-gradient(135deg, #f0f8f0, #e8f5e8); border-radius: 15px; border-left: 5px solid #FFD700; }
+        .result-section h3 { color: #228B22; margin-bottom: 15px; font-size: 1.4em; }
+        .result-section ul { list-style: none; padding-left: 0; }
+        .result-section li { margin-bottom: 10px; padding: 10px; background: white; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .error { 
+            color: #dc3545; text-align: left; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; max-width: 600px; display: none; white-space: pre-wrap; 
+        }
+        .log-area { 
+            background: rgba(0,0,0,0.8); color: #00ff00; padding: 15px; border-radius: 10px; margin: 15px 0; font-family: monospace; font-size: 0.85em; max-height: 120px; overflow-y: auto; width: 100%; max-width: 600px; display: block; 
+        }
+        .url-input { width: 100%; max-width: 500px; padding: 12px; border: 2px solid #FFD700; border-radius: 10px; margin: 10px 0; font-size: 1em; }
+        @media (max-width: 768px) { .header h1 { font-size: 2em; } .upload-zone { height: 150px; } .previews { gap: 10px; } .preview-img { width: 80px; height: 80px; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏌️‍♂️ 골프스윙폼코치 v4.0</h1>
+        <p>모든 이미지 업로드 OK! 테스트 먼저 해보세요.</p>
+    </div>
+
+    <div class="upload-zone" id="uploadZone">
+        <i>📁</i>
+        <p>파일 드래그 or 클릭 (50MB까지 무제한!)</p>
+        <input type="file" id="imageInput" multiple />
+    </div>
+
+    <input type="text" class="url-input" id="urlInput" placeholder="또는 이미지 URL (Enter)" />
+    <button class="test-btn" id="testBtn">🧪 테스트 이미지 3장 생성</button>
+    <button class="clear-btn" id="clearBtn">🗑️ 초기화</button>
+
+    <div class="previews" id="previews"></div>
+    <div class="log-area" id="logArea"></div>
+
+    <button class="analyze-btn" id="analyzeBtn" disabled>🎯 스윙 분석 시작</button>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>AI 코치가 분석 중... (10~30초)</p>
+    </div>
+    <div class="result" id="result"></div>
+    <div class="error" id="error"></div>
+
+    <script>
+        const SERVER_URL = window.location.origin;
+        const MODEL = 'grok-4-1-fast-reasoning';
+        const MAX_SIZE = 50 * 1024 * 1024;
+        let selectedFiles = [];  // File 객체 배열
+
+        const el = {
+            uploadZone: document.getElementById('uploadZone'),
+            imageInput: document.getElementById('imageInput'),
+            urlInput: document.getElementById('urlInput'),
+            previews: document.getElementById('previews'),
+            logArea: document.getElementById('logArea'),
+            analyzeBtn: document.getElementById('analyzeBtn'),
+            testBtn: document.getElementById('testBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            loading: document.getElementById('loading'),
+            result: document.getElementById('result'),
+            error: document.getElementById('error')
+        };
+
+        // 이벤트 바인딩
+        el.uploadZone.onclick = () => el.imageInput.click();
+        el.imageInput.onchange = (e) => handleFiles(e.target.files);
+        el.uploadZone.ondragover = e => { e.preventDefault(); el.uploadZone.classList.add('dragover'); };
+        el.uploadZone.ondragleave = () => el.uploadZone.classList.remove('dragover');
+        el.uploadZone.ondrop = e => {
+            e.preventDefault();
+            el.uploadZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        };
+        el.urlInput.onkeypress = e => e.key === 'Enter' && addUrl();
+        el.testBtn.onclick = generateTestFiles;
+        el.clearBtn.onclick = clearAll;
+        el.analyzeBtn.onclick = analyze;
+
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            el.logArea.innerHTML += `[${time}] ${msg}<br>`;
+            el.logArea.scrollTop = el.logArea.scrollHeight;
+            console.log(msg);
+        }
+
+        function handleFiles(files) {
+            log(`📥 ${files.length}개 파일 수신`);
+            selectedFiles = Array.from(files)
+                .filter(f => f.size <= MAX_SIZE)
+                .slice(0, 5);
+            log(`✅ 필터 후 ${selectedFiles.length}개 (50MB 이하, 5장 한정)`);
+            renderPreviews();
+            updateBtn();
+            if (selectedFiles.length === 0) showError('파일이 너무 크거나 5장 초과. 작은 이미지부터!');
+        }
+
+        function renderPreviews() {
+            el.previews.innerHTML = '';
+            selectedFiles.forEach((file, i) => {
+                const container = document.createElement('div');
+                container.className = 'preview-container';
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = 'preview-img';
+                img.title = `${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`;
+                img.onerror = () => {
+                    img.classList.add('error');
+                    log(`⚠️ ${file.name} preview 로드 실패 (Grok은 OK)`);
+                };
+                container.appendChild(img);
+                el.previews.appendChild(container);
+            });
+        }
+
+        function generateTestFiles() {
+            log('🧪 테스트 File 생성');
+            selectedFiles = [];
+            const canvas1 = createTestCanvas('백스윙', '#FFD700');
+            const canvas2 = createTestCanvas('임팩트', '#FF4500');
+            const canvas3 = createTestCanvas('팔로우', '#32CD32');
+
+            canvas1.toBlob(blob1 => {
+                const file1 = new File([blob1], 'test_backswing.png', {type: 'image/png'});
+                selectedFiles.push(file1);
+            });
+            canvas2.toBlob(blob2 => {
+                const file2 = new File([blob2], 'test_impact.png', {type: 'image/png'});
+                selectedFiles.push(file2);
+            });
+            canvas3.toBlob(blob3 => {
+                const file3 = new File([blob3], 'test_follow.png', {type: 'image/png'});
+                selectedFiles.push(file3);
+            });
+
+            setTimeout(() => {
+                renderPreviews();
+                updateBtn();
+                log('✅ 테스트 3장 추가');
+            }, 100);
+        }
+
+        function createTestCanvas(phase, color) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 300;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, 0, 400, 300);
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 50px Arial';
+            ctx.fillText(phase, 80, 160);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.arc(200, 150, 60, 0, 2 * Math.PI);
+            ctx.stroke();
+            return canvas;
+        }
+
+        async function addUrl() {
+            const url = el.urlInput.value.trim();
+            if (!url) return;
+            try {
+                log(`🌐 URL 변환: ${url}`);
+                const res = await fetch(url);
+                const blob = await res.blob();
+                if (blob.size > MAX_SIZE) throw new Error('너무 큼');
+                const file = new File([blob], 'url_image.jpg', {type: blob.type});
+                selectedFiles.push(file);
+                renderPreviews();
+                updateBtn();
+                el.urlInput.value = '';
+            } catch (e) {
+                log(`❌ URL 실패: ${e.message}`);
+                showError('URL fetch 실패. 직접 다운로드 후 업로드.');
+            }
+        }
+
+        function clearAll() {
+            selectedFiles = [];
+            el.previews.innerHTML = '';
+            el.logArea.innerHTML = '';
+            el.result.style.display = 'none';
+            updateBtn();
+            log('🗑️ 초기화 완료');
+        }
+
+        function updateBtn() {
+            el.analyzeBtn.disabled = selectedFiles.length === 0;
+        }
+
+        async function analyze() {
+            el.loading.style.display = 'block';
+            el.result.style.display = 'none';
+            el.error.style.display = 'none';
+            el.analyzeBtn.disabled = true;
+            log(`🚀 분석 시작: ${selectedFiles.length}장`);
+
+            try {
+                const imagesBase64 = await Promise.all(
+                    selectedFiles.map(file => 
+                        new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve(reader.result);
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        })
+                    )
+                );
+
+                const systemPrompt = `골프스윙폼코치. 이미지 분석:
+### 스윙 폼 분석
+시점/자세.
+### 유사 프로
+이름+이유.
+### 장단점
+### 개선 방안
+한국어 Markdown.`;
+
+                const messages = [{
+                    role: 'user',
+                    content: [{type: 'text', text: systemPrompt}, ...imagesBase64.map(b => ({type: 'image_url', image_url: {url: b}}))]
+                }];
+
+                const res = await fetch(`${SERVER_URL}/api/grok`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({messages, model: MODEL, max_tokens: 4000, temperature: 0.3})
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'API 실패');
+
+                const content = data.choices[0].message.content;
+                el.result.innerHTML = `<h2>🏆 AI 코치 결과</h2>
+                <div class="result-section">${content.replace(/###\s?(.*?)(?=\n\n|$)/gs, '<h3>$1</h3>').replace(/^- (.*)/gm, '<li>$1</li>')}</div>`;
+                el.result.style.display = 'block';
+                log('✅ 성공!');
+
+            } catch (err) {
+                log(`🚨 실패: ${err.message}`);
+                showError(`분석 에러\n${err.message}\n\nXAI_KEY 확인 또는 서버 로그.`);
+            } finally {
+                el.loading.style.display = 'none';
+                el.analyzeBtn.disabled = false;
+            }
+        }
+
+        function showError(msg) {
+            el.error.innerHTML = msg;
+            el.error.style.display = 'block';
+        }
+
+        log('🎉 v4.0 로드. 테스트 클릭!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 심사품질연구회 AI 개발 경진대회</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%); 
+            color: #fff; min-height: 100vh; 
+            overflow-x: hidden; position: relative;
+        }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        header { 
+            background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff); 
+            padding: 2rem; text-align: center; 
+            box-shadow: 0 4px 20px rgba(0,212,255,0.3); 
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow { 0% { box-shadow: 0 4px 20px rgba(0,212,255,0.3); } 100% { box-shadow: 0 4px 40px rgba(0,212,255,0.6); } }
+        h1 { 
+            font-size: 2.5rem; margin-bottom: 0.5rem; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+            background: linear-gradient(45deg, #fff, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; animation: fadeInUp 1s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 0.9; transform: translateY(0); } }
+        .intro { 
+            max-width: 800px; margin: 2rem auto; padding: 0 2rem; text-align: center; 
+            font-size: 1.1rem; line-height: 1.6; 
+            opacity: 0; animation: fadeInUp 1.5s ease forwards 0.5s;
+        }
+        .typing-demo { border-right: 2px solid #00d4ff; white-space: nowrap; overflow: hidden; animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite; }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { from, to { border-color: transparent; } 50% { border-color: #00d4ff; } }
+        .entries { 
+            max-width: 1200px; margin: 3rem auto; padding: 0 2rem; 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; 
+        }
+        .entry-card { 
+            background: rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem; text-align: center; 
+            transition: all 0.4s ease; backdrop-filter: blur(15px); 
+            border: 1px solid rgba(0,212,255,0.3); 
+            transform-style: preserve-3d; perspective: 1000px;
+            opacity: 0; animation: cardFadeIn 0.8s ease forwards;
+        }
+        .entries .entry-card:nth-child(1) { animation-delay: 0.2s; }
+        .entries .entry-card:nth-child(2) { animation-delay: 0.4s; }
+        .entries .entry-card:nth-child(3) { animation-delay: 0.6s; }
+        .entries .entry-card:nth-child(4) { animation-delay: 0.8s; }
+        .entries .entry-card:nth-child(5) { animation-delay: 1.0s; }
+        .entries .entry-card:nth-child(6) { animation-delay: 1.2s; }
+        .entries .entry-card:nth-child(7) { animation-delay: 1.4s; }
+        .entries .entry-card:nth-child(8) { animation-delay: 1.6s; }
+        @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) rotateX(10deg); } to { opacity: 1; transform: translateY(0) rotateX(0); } }
+        .entry-card:hover { 
+            transform: translateY(-15px) rotateY(5deg) scale(1.05); 
+            box-shadow: 0 25px 50px rgba(0,212,255,0.5); 
+            background: rgba(255,255,255,0.25); 
+            border-color: #00d4ff;
+        }
+        .entry-icon { font-size: 3rem; margin-bottom: 1rem; animation: iconPulse 2s infinite; }
+        @keyframes iconPulse { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.2) rotate(10deg); } }
+        .entry-btn { 
+            background: linear-gradient(45deg, #00d4ff, #0099cc); color: #000; border: none; 
+            padding: 1rem 2rem; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; 
+            transition: all 0.3s; margin-top: 1rem; text-decoration: none; display: inline-block; 
+            position: relative; overflow: hidden;
+        }
+        .entry-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: 0.5s;
+        }
+        .entry-btn:hover::before { left: 100%; }
+        .entry-btn:hover { box-shadow: 0 10px 30px rgba(0,212,255,0.6); transform: scale(1.08); }
+        .waiting { background: rgba(128,128,128,0.4); color: #aaa; cursor: not-allowed; }
+        .waiting:hover { transform: none; box-shadow: none; }
+        .waiting .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-right: 0.5rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        footer { 
+            text-align: center; padding: 2rem; opacity: 0.8; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            margin-top: 3rem;
+        }
+        .counter { font-weight: bold; color: #00d4ff; font-size: 1.1rem; }
+        @media (max-width: 768px) { 
+            h1 { font-size: 2rem; } 
+            .entries { grid-template-columns: 1fr; gap: 1.5rem; } 
+            .entry-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    <header>
+        <h1>🚀 심사품질연구회 AI 개발 경진대회</h1>
+        <p class="subtitle">다양한 아이디어로 승부하는 AI의 장소</p>
+    </header>
+
+    <section class="intro">
+        <p>혁신적인 AI 아이디어를 출품하고, AI 전문가로 성장하세요. 지금은 <strong><span class="typing-demo">신내림 해몽 로또번호 추천 봇</span></strong>이 첫 출품작으로 빛을 발하고 있습니다. 더 많은 작품을 기다립니다!</p>
+    </section>
+
+    <section class="entries">
+        <!-- 출품작 1 -->
+        <div class="entry-card">
+            <div class="entry-icon">🎰</div>
+            <h3>신내림 해몽 로또번호 추천 봇</h3>
+            <p>신내림의 신비로운 해몽으로 로또 번호를 추천! 운과 AI의 환상 콜라보.</p>
+            <a href="신내림.html" class="entry-btn" target="_blank" aria-label="신내림 봇 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 2 -->
+        <div class="entry-card">
+            <div class="entry-icon">🥚</div>
+            <h3>다마고치</h3>
+            <p>AI와 함께 키우는 귀여운 반려 몬스터! 성장과 애정이 기다립니다.</p>
+            <a href="다마고치.html" class="entry-btn" target="_blank" aria-label="다마고치 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 3 -->
+        <div class="entry-card">
+            <div class="entry-icon">🧠</div>
+            <h3>심리검사봇</h3>
+            <p>깊이 있는 AI 심리 분석으로 자신을 발견하세요. 정확도 99%!</p>
+            <a href="심리검사.html" class="entry-btn" target="_blank" aria-label="심리검사봇 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 4 -->
+        <div class="entry-card">
+            <div class="entry-icon">💄</div>
+            <h3>메이크업 조언샘</h3>
+            <p>얼굴 사진을 업로드하면, AI가 분석 후 완벽한 메이크업 팁을 드려요.</p>
+            <a href="메이크업.html" class="entry-btn" target="_blank" aria-label="메이크업 조언샘 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 5 -->
+        <div class="entry-card">
+            <div class="entry-icon">⚔️</div>
+            <h3>대전청사 미궁</h3>
+            <p>⚔️ 신규심사관의 특허 심사 모험!</p>
+            <a href="대전청사미궁.html" class="entry-btn" target="_blank" aria-label="대전청사 미궁 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 6 -->
+        <div class="entry-card">
+            <div class="entry-icon">⛳</div>
+            <h3>골프폼 유연샘</h3>
+            <p>스윙 사진 업로드하면, 프로 코치처럼 폼 분석 + 개선 조언 드려요.</p>
+            <a href="골프스윙.html" class="entry-btn" target="_blank" aria-label="골프폼 유연샘 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 출품작 7 -->
+        <div class="entry-card">
+            <div class="entry-icon">👁️</div>
+            <h3>관심법 좀 아는 봇</h3>
+            <p>얼굴 사진으로 관상 분석 + 따뜻한 인생 조언 받아보세요!</p>
+            <a href="관상봇.html" class="entry-btn" target="_blank" aria-label="관심법 봇 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 신규 출품작 8: 사춘기 언어 번역기 -->
+        <div class="entry-card">
+            <div class="entry-icon">👦</div>
+            <h3>사춘기 언어 번역기</h3>
+            <p>사춘기 아이의 말을 입력하세요. 부모님을 위한 친절한 분석과 조언을 드려요!</p>
+            <a href="사춘기언어.html" class="entry-btn" target="_blank" aria-label="사춘기 언어 번역기 대회창 이동">대회창으로 이동</a>
+        </div>
+
+        <!-- 대기 슬롯 1 -->
+        <div class="entry-card">
+            <div class="entry-icon">⏳</div>
+            <h3>출품 대기중</h3>
+            <p>새로운 AI 작품을 여기에...</p>
+            <button class="entry-btn waiting" disabled aria-label="출품 대기중">
+                <span class="spinner"></span>출품 대기중
+            </button>
+        </div>
+
+        <!-- 대기 슬롯 2 -->
+        <div class="entry-card">
+            <div class="entry-icon">⏳</div>
+            <h3>출품 대기중</h3>
+            <p>새로운 AI 작품을 여기에...</p>
+            <button class="entry-btn waiting" disabled aria-label="출품 대기중">
+                <span class="spinner"></span>출품 대기중
+            </button>
+        </div>
+
+        <!-- 대기 슬롯 3 -->
+        <div class="entry-card">
+            <div class="entry-icon">⏳</div>
+            <h3>출품 대기중</h3>
+            <p>새로운 AI 작품을 여기에...</p>
+            <button class="entry-btn waiting" disabled aria-label="출품 대기중">
+                <span class="spinner"></span>출품 대기중
+            </button>
+        </div>
+
+        <!-- 대기 슬롯 4 -->
+        <div class="entry-card">
+            <div class="entry-icon">⏳</div>
+            <h3>출품 대기중</h3>
+            <p>새로운 AI 작품을 여기에...</p>
+            <button class="entry-btn waiting" disabled aria-label="출품 대기중">
+                <span class="spinner"></span>출품 대기중
+            </button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 심사품질연구회. | 출품 문의: <a href="Buddy JUN" style="color: #00d4ff;">Buddy JUN</a></p>
+        <p class="counter" id="counter">현재 출품: <span>8</span>/12</p>
+    </footer>
+
+    <script>
+        // 파티클 애니메이션 (별자리 효과)
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 2 + 1,
+                alpha: Math.random() * 0.5 + 0.2
+            });
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
+                ctx.fill();
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // 타이핑 애니메이션 완료 후
+        setTimeout(() => {
+            document.querySelector('.typing-demo').style.borderRight = 'none';
+        }, 3000);
+    </script>
+</body>
+</html>

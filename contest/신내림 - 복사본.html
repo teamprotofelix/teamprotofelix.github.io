@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신내림 로또 봇 - 꿈으로 번호 맞추기 (보안 버전)</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e3c72, #2a5298); 
+            color: #fff; 
+            margin: 0; 
+            padding: 20px; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { 
+            font-size: 2.5em; 
+            background: linear-gradient(90deg, #ffd700, #ffed4e); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            margin: 0; 
+            text-shadow: 0 0 20px rgba(255,215,0,0.5); 
+        }
+        .api-key-section { 
+            background: rgba(0,0,0,0.3); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+        }
+        .warning { 
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52); 
+            color: #fff; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 10px; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        input[type="password"] { 
+            width: 100%; 
+            padding: 10px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #fff; 
+            color: #333; 
+            font-size: 16px; 
+            margin-bottom: 10px;
+        }
+        button { 
+            padding: 10px 20px; 
+            background: linear-gradient(135deg, #ffd700, #ffed4e); 
+            border: none; 
+            border-radius: 5px; 
+            color: #333; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+            margin-right: 10px;
+        }
+        button:hover { transform: scale(1.05); }
+        .logout-btn { 
+            background: #ff4757; 
+            color: #fff; 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            margin-left: 10px;
+        }
+        #chat-container { 
+            flex: 1; 
+            overflow-y: auto; 
+            background: rgba(0,0,0,0.2); 
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+        }
+        .message { 
+            margin-bottom: 15px; 
+            padding: 12px; 
+            border-radius: 18px; 
+            max-width: 80%; 
+            word-wrap: break-word; 
+        }
+        .bot { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            margin-left: 20%; 
+        }
+        .user { 
+            background: linear-gradient(135deg, #f093fb, #f5576c); 
+            margin-right: 20%; 
+            color: #fff; 
+        }
+        .input-section { display: flex; gap: 10px; }
+        input[type="text"] { 
+            flex: 1; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 25px; 
+            background: rgba(255,255,255,0.9); 
+            font-size: 16px; 
+        }
+        .section { 
+            background: rgba(255,255,255,0.1); 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin: 5px 0; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧙‍♂️ 신내림 로또 봇</h1>
+        <p>어제 밤 꿈을 말해주세요. 신이 내린 번호를 추천해드립니다! (로또 6/45)</p>
+    </div>
+
+    <div class="api-key-section">
+        <div class="warning">⚠️ 보안 주의: sessionStorage 사용 (탭 닫을 때 자동 삭제). 공유 PC 사용 시 로그아웃 필수!</div>
+        <label>xAI API Key 입력 (탭 종료 시 자동 삭제):</label>
+        <input type="password" id="apiKey" placeholder="xai-..." />
+        <button onclick="saveApiKey()">저장 (이번 세션)</button>
+        <button class="logout-btn" onclick="logout()">로그아웃 (키 삭제)</button>
+    </div>
+
+    <div id="chat-container"></div>
+
+    <div class="input-section">
+        <input type="text" id="userInput" placeholder="어제 밤 꿈 이야기를 자세히 말씀해주세요... (예: '물에 빠졌다가 헤엄쳐 나옴')" />
+        <button onclick="sendMessage()">전송</button>
+    </div>
+
+    <script>
+        const SYSTEM_PROMPT = `너의 이름은 '신내림 로또 봇'이다. 로또 6/45 번호(1~45 중 6개)를 맞추는 챗봇이다. 모델: grok-4-1-fast-reasoning.
+
+사용자에게 "대화창에 어제 밤 꿈 이야기를 입력하세요"라고 유도한다.
+
+응답 형식은 반드시:
+[꿈해몽]
+(성의있고 설득력 있게: 한국 전통 꿈해몽(물=재물/6,15,24; 뱀=변화/3,12,33; 하늘=행운/1,7,45 등 500+ DB 총망라), 프로이트 심리, 융 원형, 문화 상징, 로또 통계 연계. 꿈 키워드 벡터화: 긍정=상승수, 부정=변화수 → 숫자 추천 근거 설명.)
+
+[로또번호 추천]
+추천번호: 01, 05, 12, 23, 34, 45 (벡터화 설명 + 보너스 1개)
+
+꿈해몽은 모든 DB(전통서·현대 사이트·심리학)를 총망라해 깊고 설득력 있게. 번호는 꿈 벡터로 생성(랜덤+가중).`;
+
+        let apiKey = sessionStorage.getItem('xaiApiKey') || '';
+
+        function saveApiKey() {
+            apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                alert('API 키를 입력하세요!');
+                return;
+            }
+            sessionStorage.setItem('xaiApiKey', apiKey);
+            addMessage('bot', '✅ API 키 이번 세션 저장 완료! (탭 닫으면 자동 삭제. 공유 PC 주의)');
+        }
+
+        function logout() {
+            sessionStorage.removeItem('xaiApiKey');
+            apiKey = '';
+            document.getElementById('apiKey').value = '';
+            addMessage('bot', '🔒 로그아웃 완료. 키 완전 삭제.');
+        }
+
+        function addMessage(sender, text) {
+            const container = document.getElementById('chat-container');
+            const msg = document.createElement('div');
+            msg.className = `message ${sender}`;
+            msg.innerHTML = text.replace(/\n/g, '<br>');
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendMessage() {
+            apiKey = sessionStorage.getItem('xaiApiKey') || '';  // 최신 확인
+            const input = document.getElementById('userInput');
+            const userText = input.value.trim();
+            if (!userText) return;
+            if (!apiKey) {
+                addMessage('bot', '❌ 세션 만료 또는 키 없음. API 키 입력/저장 후 재시도.');
+                return;
+            }
+
+            addMessage('user', userText);
+            input.value = '';
+
+            try {
+                const response = await fetch('https://api.x.ai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'grok-4-1-fast-reasoning',
+                        messages: [
+                            { role: 'system', content: SYSTEM_PROMPT },
+                            { role: 'user', content: userText }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 1500
+                    })
+                });
+
+                if (!response.ok) throw new Error(`API 오류: ${response.status}`);
+
+                const data = await response.json();
+                const botText = data.choices[0].message.content;
+
+                const parsed = botText
+                    .replace(/\[꿈해몽\]/g, '<div class="section">[꿈해몽]</div>')
+                    .replace(/\[로또번호 추천\]/g, '<div class="section">[로또번호 추천]</div>');
+                addMessage('bot', parsed);
+            } catch (error) {
+                addMessage('bot', `❌ API 오류: ${error.message}. 키 확인 또는 xAI 콘솔 체크.`);
+            }
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        window.onload = () => {
+            if (apiKey) {
+                addMessage('bot', '<div class="section">[세션 로드]</div>🧙‍♂️ 신내림 로또 봇 준비 완료. 어제 밤 꿈 이야기 말씀해주세요!');
+            } else {
+                addMessage('bot', '<div class="section">[보안 안내]</div>🧙‍♂️ 신내림 로또 봇입니다. API 키 저장 후 꿈 이야기 입력하세요. (탭 종료 시 자동 삭제)');
+            }
+        };
+    </script>
+</body>
+</html>
