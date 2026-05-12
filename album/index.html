@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대전의 봄 - 사진 앨범</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); 
+            color: #333; 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            padding: 30px; 
+            background: rgba(255,255,255,0.8); 
+            border-radius: 25px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+        }
+        h1 { 
+            font-size: 3em; 
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            margin-bottom: 10px; 
+            font-weight: 800; 
+        }
+        .subtitle { font-size: 1.4em; color: #666; }
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+        }
+        .item { 
+            position: relative; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            transition: all 0.4s ease; 
+            cursor: pointer; 
+            height: 250px; 
+            background: #f8f9fa; 
+        }
+        .item:hover { 
+            transform: translateY(-12px) scale(1.03); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3); 
+        }
+        .item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;  /* 썸네일 crop 최적화 – 대용량 빠름 */
+            display: block; 
+            loading: lazy; 
+        }
+        .modal { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000; 
+            padding: 20px; 
+        }
+        .modal img { 
+            max-width: 95%; 
+            max-height: 95%; 
+            border-radius: 12px; 
+            box-shadow: 0 0 60px rgba(255,255,255,0.3); 
+            object-fit: contain; 
+        }
+        .close { 
+            position: absolute; 
+            top: 40px; right: 40px; 
+            color: #fff; 
+            font-size: 50px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.8); 
+            transition: 0.3s; 
+        }
+        .close:hover { color: #00E5FF; transform: scale(1.2); }
+        .stats { 
+            text-align: center; 
+            font-size: 1.2em; 
+            margin-top: 30px; 
+            color: #666; 
+        }
+        @media (max-width: 768px) { 
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } 
+            h1 { font-size: 2.2em; } 
+            .header { padding: 20px; margin-bottom: 30px; } 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌸 대전의 봄</h1>
+        <p class="subtitle">봄날의 추억을 담은 사진 앨범</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="stats" id="stats">60+ 사진 로딩 중...</div>
+    <div class="modal" id="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImg" src="" alt="대전의 봄">
+    </div>
+
+    <script>
+        // 모든 파일명 (은재님 목록 그대로!)
+        const images = [
+            'DSC_5450.jpg', 'DSC_5452.jpg', 'DSC_5453.jpg', 'SAM_8023.JPG', 'SAM_8024.JPG', 'SAM_8025.JPG',
+            'SAM_8026.JPG', 'SAM_8027.JPG', 'SAM_8028.JPG', 'SAM_8029.JPG', 'SAM_8030.JPG', 'SAM_8031.JPG',
+            'SAM_8181.JPG', 'SAM_8182.JPG', 'SAM_8183.JPG', 'SAM_8184.JPG', 'SAM_8186.JPG', 'SAM_8187.JPG',
+            'SAM_8188.JPG', 'SAM_8189.JPG', 'SAM_8190.JPG', 'SAM_8191.JPG', 'SAM_8192.JPG', 'SAM_8193.JPG',
+            'SAM_8194.JPG', 'SAM_8195.JPG', 'SAM_8196.JPG', 'SAM_8197.JPG', 'SAM_8198.JPG', 'SAM_8200.JPG',
+            'SAM_8201.JPG', 'SAM_8202.JPG', 'SAM_8203.JPG', 'SAM_8204.JPG', 'SAM_8205.JPG', 'SAM_8206.JPG',
+            'SAM_8207.JPG', 'SAM_8209.JPG', 'SAM_8210.JPG', 'SAM_8212.JPG', 'SAM_8213.JPG', 'SAM_8235.JPG',
+            'SAM_8255.JPG', 'SAM_8257.JPG', 'SAM_8310.JPG', 'SAM_8311.JPG', 'SAM_8312.JPG', 'SAM_8313.JPG',
+            'SAM_8314.JPG', 'SAM_8315.JPG', 'SAM_8316.JPG', 'SAM_8317.JPG', 'SAM_8318.JPG', 'SAM_8319.JPG',
+            'SAM_8320.JPG', 'SAM_8466.JPG', 'SAM_8468.JPG', 'SAM_8470.JPG', 'SAM_8471.JPG', 'SAM_8473.JPG',
+            'SAM_8474.JPG', 'SAM_8475.JPG', 'SAM_8477.JPG', 'SAM_8479.JPG', 'SAM_8480.JPG', 'SAM_8481.JPG',
+            'SAM_8483.JPG', 'SAM_8485.JPG', 'SAM_8487.JPG', 'SAM_8489.JPG', 'SAM_8491.JPG', 'SAM_8493.JPG',
+            'SAM_8495.JPG', 'SAM_8497.JPG', 'SAM_8499.JPG', 'SAM_8501.JPG', 'SAM_8503.JPG', 'SAM_8505.JPG',
+            'SAM_8507.JPG', 'SAM_8509.JPG', 'SAM_8512.JPG', 'SAM_8514.JPG', 'SAM_8516.JPG', 'SAM_8518.JPG',
+            'SAM_8520.JPG', 'SAM_8522.JPG', 'SAM_8525.JPG', 'SAM_8527.JPG', 'SAM_8529.JPG', 'SAM_8531.JPG',
+            'SAM_8533.JPG', 'SAM_8535.JPG'
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const stats = document.getElementById('stats');
+
+        images.forEach((filename, index) => {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.onclick = () => openModal(`./${filename}`);
+            item.innerHTML = `<img src="./${filename}" alt="${filename}" loading="lazy" onerror="this.parentNode.remove()">`;
+            gallery.appendChild(item);
+        });
+
+        stats.textContent = `${images.length}장의 대전 봄 추억`;
+
+        function openModal(src) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modalImg').src = src;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+        document.getElementById('modal').onclick = (e) => e.target.classList.contains('modal') && closeModal();
+    </script>
+</body>
+</html>
