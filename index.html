@@ -27,20 +27,24 @@
         }
         .big-redirect-btn:hover { transform: translateY(-10px) scale(1.05) !important; box-shadow: 0 35px 70px rgba(0,123,255,0.6) !important;
             background: linear-gradient(135deg, #0056b3, #007bff) !important; text-shadow: 0 0 20px rgba(255,255,255,0.8); color: #fff !important; }
-        /* AI 봇 버튼 기본 */
+        /* AI 봇 버튼 개선: 현대적 블루/퍼플/틸 테마로 통일, 붉은색 제거, 모양 세련되게 (radius↓, 그림자 부드럽게, 패딩 최적화) */
         .ai-bot-buttons { margin-bottom: 3rem; }
         .ai-bot-btn { 
-            display: block; width: 100%; margin-bottom: 1rem; padding: 1.5rem 2rem; font-size: 1.3rem; font-weight: 600;
-            border: none; border-radius: 20px; text-decoration: none; text-align: center; color: white; transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; overflow: hidden;
+            display: block; width: 100%; margin-bottom: 1rem; padding: 1.2rem 1.8rem; font-size: 1.2rem; font-weight: 700;
+            border: none; border-radius: 12px; text-decoration: none; text-align: center; color: white; transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); position: relative; overflow: hidden; letter-spacing: 0.5px;
         }
-        .ai-bot-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); color: white !important; }
-        .ai-bot-btn i { font-size: 1.8rem; margin-right: 1rem; }
-        .ai-bot-btn:nth-of-type(1) { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
-        .ai-bot-btn:nth-of-type(2) { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
-        .ai-bot-btn:nth-of-type(3) { background: linear-gradient(135deg, #45b7d1, #96c93d); }
-        .ai-bot-btn:nth-of-type(4) { background: linear-gradient(135deg, #f39c12, #e67e22); }
-        /* ★ 강조 컨테스트 버튼 ★ */
+        .ai-bot-btn:hover { 
+            transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.25); color: white !important; 
+            filter: brightness(1.05); 
+        }
+        .ai-bot-btn i { font-size: 1.5rem; margin-right: 0.8rem; }
+        /* 색상 개선: 헤더 블루 테마와 조화 (퍼플-블루, 틸-민트, 블루-인디고, 라이트블루-시안) */
+        .ai-bot-btn:nth-of-type(1) { background: linear-gradient(135deg, #6c5ce7, #a29bfe); } /* 안녕봇: 세련된 퍼플-라벤더 */
+        .ai-bot-btn:nth-of-type(2) { background: linear-gradient(135deg, #00cec9, #4ecdc4); } /* 청구항: 부드러운 틸-청록 (기존 유지+부드럽게) */
+        .ai-bot-btn:nth-of-type(3) { background: linear-gradient(135deg, #55a3ff, #45b7d1); } /* 상표: 클린 블루-인디고 */
+        .ai-bot-btn:nth-of-type(4) { background: linear-gradient(135deg, #74b9ff, #0984e3); } /* 강의: 라이트블루-딥블루 (헤더 연동) */
+        /* ★ 강조 컨테스트 버튼 ★ (그대로 유지) */
         .contest-btn {
             font-size: 1.6rem !important; font-weight: 800 !important; padding: 2rem 2.5rem !important;
             background: linear-gradient(135deg, #ffd700, #ffed4e, #9b59b6, #00d2d3) !important;
@@ -74,7 +78,7 @@
         </div>
     </div>
 
-    <!-- AI 봇 버튼 (컨테스트 강조) -->
+    <!-- AI 봇 버튼 (컨테스트 강조, 버튼 스타일 개선됨) -->
     <section class="redirect-section">
         <div class="container">
             <div class="row justify-content-center ai-bot-buttons">
@@ -92,7 +96,7 @@
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <a href="https://trademark.moip.ai.kr" class="ai-bot-btn">
+                            <a href="https://patent.moip.ai.kr/상표비교봇.html" class="ai-bot-btn">
                                 <i class="fas fa-file-contract"></i>상표 디자인 비교봇
                             </a>
                         </div>
@@ -119,6 +123,7 @@
         </div>
     </section>
 
+    <!-- 나머지 섹션 동일 (변경 없음) -->
     <!-- 1. 개발 목적 -->
     <section class="section bg-light">
         <div class="container">
