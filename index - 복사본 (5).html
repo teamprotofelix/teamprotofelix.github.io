@@ -160,23 +160,6 @@
             header { background-attachment: scroll; }
             .contest-btn { font-size: 1.4rem !important; padding: 1.2rem 2rem !important; }
         }
-
-        .logo-link {
-            display: inline-block; /* 클릭 영역 확보 */
-            text-decoration: none; /* 밑줄 제거 */
-            cursor: pointer; /* 손가락 커서 */
-            transition: all 0.3s ease;
-        }
-
-        .logo-link:hover .logo {
-            transform: scale(1.05); /* 살짝 확대 */
-            filter: drop-shadow(0 0 30px rgba(0,229,255,1)); /* 네온 강조 */
-            animation-duration: 1s; /* 호버 시 glow 속도 UP */
-        }
-
-
-
-
     </style>
 </head>
 <body>
@@ -188,9 +171,7 @@
     <!-- 헤더: AI 코어 이미지 히어로 배너 -->
     <header>
         <div class="hero-content">
-            <a href="#bots" class="logo-link">
-                <h1 class="logo">심사품질 AI센터</h1>
-            </a>
+            <h1 class="logo">심사품질 AI센터</h1>
             <p class="header-subtitle">특허·상표·디자인 심사품질 진단의 객관성·정확성·일관성을 위한 AI 동반자</p>
         </div>
     </header>
@@ -382,19 +363,6 @@
 
         // 리사이즈
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-
-
-        document.querySelector('.logo-link').addEventListener('click', function(e) {
-            e.preventDefault(); // 기본 점프 방지
-            const target = document.querySelector('#bots');
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',  // 부드러운 스크롤
-                    block: 'start'       // 상단 포커싱
-                });
-            }
-        });
-
     </script>
 </body>
 </html>
