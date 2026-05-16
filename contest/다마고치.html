@@ -187,8 +187,8 @@ ${context ? `행동 결과: ${context}` : ''}
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         messages: [{ role: 'user', content: prompt }],
-                        model: 'grok-4-1-fast-reasoning',
-                        max_tokens: 500,
+                        model: 'grok-4.20-0309-non-reasoning',
+                        max_tokens: 5000,
                         temperature: 0.9
                     })
                 });

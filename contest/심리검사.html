@@ -186,9 +186,9 @@
                                 { role: 'system', content: SYSTEM_PROMPT },
                                 { role: 'user', content: `답변들: ${answers.join('\n\n')}` }
                             ],
-                            model: 'grok-4-1-fast-reasoning',  // 서버에서 오버라이드 가능
+                            model: 'grok-4.20-0309-non-reasoning',  // 서버에서 오버라이드 가능
                             temperature: 0.6,
-                            max_tokens: 2000,
+                            max_tokens: 20000,
                             stream: false
                         })
                     });

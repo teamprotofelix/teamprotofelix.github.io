@@ -276,9 +276,9 @@
                             { role: 'system', content: SYSTEM_PROMPT + '\n현재 상태: ' + JSON.stringify(gameState) },
                             ...gameState.history.slice(-10)
                         ],
-                        model: 'grok-4-1-fast-reasoning',
+                        model: 'grok-4.20-0309-non-reasoning',
                         temperature: 0.8,
-                        max_tokens: 4000
+                        max_tokens: 40000
                     })
                 });
 
