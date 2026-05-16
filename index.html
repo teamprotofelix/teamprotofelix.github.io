@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>심사품질담당관실 AI센터 | 특허청 심사품질 진단 AI</title>
+    <title>심사품질 AI센터 | 심사품질 진단 AI</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -32,33 +32,45 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
         .hero-content {
             position: relative;
             z-index: 2;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.65);           /* 기존 0.6 → 0.65로 약간 진하게 */
             backdrop-filter: blur(15px);
-            padding: 3rem 2rem;
+            padding: 3.5rem 2.5rem 2.5rem 2.5rem;     /* 아래 패딩 줄임 */
             border-radius: 30px;
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.2);  /* 0.3 → 0.2로 연하게 변경 */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+                        inset 0 0 40px rgba(0, 229, 255, 0.08); /* inset 효과 약하게 조정 */
             max-width: 90%;
             animation: fadeInUp 1.5s ease-out;
         }
+
         .logo {
-            font-size: clamp(3rem, 10vw, 6rem); font-weight: 900;
+            font-size: clamp(3rem, 10vw, 6rem); 
+            font-weight: 900;
             background: linear-gradient(45deg, #00E5FF, #A78BFA, #FF6B6B);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 50px rgba(0,229,255,0.8); animation: glow 2s ease-in-out infinite alternate;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(0,229,255,0.8); 
+            animation: glow 2s ease-in-out infinite alternate;
             filter: drop-shadow(0 0 20px rgba(0,229,255,0.5));
-            margin-bottom: 1rem;
+            margin-bottom: 0.6rem;           /* ← 1rem → 0.6rem로 줄임 (가장 중요) */
+            display: inline-block;
+            padding-bottom: 0;
+            border-bottom: none;
         }
+
         .header-subtitle {
             font-size: clamp(1.2rem, 4vw, 1.8rem);
             opacity: 0.95;
             line-height: 1.4;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0.8rem auto 0 auto;     /* ← margin-top을 0.8rem 정도로 조정 */
         }
+
+
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes glow { 0% { text-shadow: 0 0 20px rgba(0,229,255,0.5); } 100% { text-shadow: 0 0 50px rgba(0,229,255,1); } }
@@ -176,6 +188,52 @@
             header { background-attachment: scroll; }
             .tpf-logo { max-width: 260px; }
         }
+
+        /* ==================== 메인 로고 스타일 (신규) ==================== */
+        .main-logo {
+            max-width: 420px;
+            width: 100%;
+            display: block;
+            margin: 0 auto 1.8rem auto;
+            filter: drop-shadow(0 0 45px rgba(0, 229, 255, 0.85));
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 24px;
+        }
+        .main-logo:hover {
+            transform: scale(1.06);
+            filter: drop-shadow(0 0 70px rgba(0, 229, 255, 0.95));
+        }
+        .main-title {
+            font-size: clamp(3.2rem, 9vw, 5.5rem);
+            font-weight: 900;
+            text-align: center;
+            background: linear-gradient(90deg, #00E5FF, #A78BFA, #FF6B6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(0, 229, 255, 0.9),
+                        0 0 80px rgba(167, 139, 250, 0.7),
+                        0 0 120px rgba(255, 107, 107, 0.4);
+            animation: glow 2.8s ease-in-out infinite alternate;
+            margin-bottom: 0.8rem;
+            letter-spacing: -2px;
+        }
+
+        .logo-link {
+            display: inline-block; /* 클릭 영역 확보 */
+            text-decoration: none; /* 밑줄 제거 */
+            cursor: pointer; /* 손가락 커서 */
+            transition: all 0.3s ease;
+        }
+
+        .logo-link:hover .logo {
+            transform: scale(1.05); /* 살짝 확대 */
+            filter: drop-shadow(0 0 30px rgba(0,229,255,1)); /* 네온 강조 */
+            animation-duration: 1s; /* 호버 시 glow 속도 UP */
+        }
+
+
+
+
     </style>
 </head>
 <body>
@@ -184,14 +242,21 @@
     <div class="cursor" id="cursor"></div>
 
     <!-- 헤더 -->
+
+
     <header>
         <div class="hero-content">
             <a href="#bots" class="logo-link">
-                <h1 class="logo">심사품질 AI센터</h1>
+                <img src="QAlogo.jpg" alt="심사품질 AI센터" class="main-logo">
+                <h1 class="main-title">심사품질 AI</h1>
             </a>
-            <p class="header-subtitle">특허·상표·디자인 심사품질 진단의 객관성·정확성·일관성을 위한 AI 동반자</p>
+            <p class="header-subtitle">
+                특허·상표·디자인 심사품질 진단의<br>
+                객관성·정확성·일관성을 위한 <strong>AI 동반자</strong>
+            </p>
         </div>
     </header>
+
 
     <!-- AI 봇 버튼 -->
     <section id="bots">
