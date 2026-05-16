@@ -18,7 +18,6 @@
         }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; }
         .cursor { position: fixed; width: 20px; height: 20px; background: radial-gradient(circle, #00E5FF, transparent); border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
-        
         header {
             height: 100vh;
             display: flex;
@@ -59,20 +58,13 @@
             max-width: 800px;
             margin: 0 auto;
         }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes glow { 0% { text-shadow: 0 0 20px rgba(0,229,255,0.5); } 100% { text-shadow: 0 0 50px rgba(0,229,255,1); } }
-        
-        section { 
-            padding: 80px 20px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            opacity: 0; 
-            transform: translateY(50px); 
-            transition: all 1s ease; 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes glow { 0% { text-shadow: 0 0 20px rgba(0,229,255,0.5); } 100% { text-shadow: 0 0 50px rgba(0,229,255,1); } }
+        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(50px); transition: all 1s ease; }
         section.visible { opacity: 1; transform: translateY(0); }
-        
         h2 {
             font-size: 3rem; text-align: center; margin-bottom: 50px;
             background: linear-gradient(90deg, #00E5FF, #00B4D8, #A78BFA);
@@ -80,110 +72,120 @@
             text-shadow: 0 0 30px rgba(0,229,255,0.7); animation: pulse 3s infinite;
         }
         @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.8;} }
-
         .card {
-            background: rgba(255,255,255,0.05); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(0,229,255,0.3);
-            padding: 30px; 
-            margin: 20px 0; 
-            border-radius: 20px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transform: perspective(1000px) rotateY(0deg); 
-            transition: all 0.5s;
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(0,229,255,0.3);
+            padding: 30px; margin: 20px 0; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateY(0deg); transition: all 0.5s;
         }
-        .card:hover { 
-            transform: perspective(1000px) rotateY(10deg) translateZ(20px); 
-            box-shadow: 0 30px 60px rgba(0,229,255,0.3); 
-        }
-        .icon-box { 
-            font-size: 2.8rem; 
-            color: #00E5FF; 
-            margin-bottom: 1.2rem; 
-            text-shadow: 0 0 25px rgba(0,229,255,0.6); 
-        }
-
+        .card:hover { transform: perspective(1000px) rotateY(10deg) translateZ(20px); box-shadow: 0 30px 60px rgba(0,229,255,0.3); }
+        .icon-box { font-size: 2.5rem; color: #00E5FF; margin-bottom: 1rem; text-shadow: 0 0 20px rgba(0,229,255,0.5); }
         .effect-list { list-style: none; }
-        .effect-list li { 
-            margin: 12px 0; 
-            padding-left: 25px; 
-            position: relative; 
-        }
-        .effect-list li::before { 
-            content: '▸'; 
-            color: #00E5FF; 
-            font-weight: bold; 
-            position: absolute; 
-            left: 0; 
-            animation: pulse 2s infinite; 
-        }
+        .effect-list li { margin: 10px 0; padding-left: 20px; position: relative; }
+        .effect-list li::before { content: '▸'; color: #00E5FF; font-weight: bold; position: absolute; left: 0; animation: pulse 2s infinite; }
 
-        /* 버튼 스타일 (기존 유지) */
+        /* 버튼 스타일: 우주 블랙 + hover 배경 드러남 (새 버전) */
         .ai-bot-buttons { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 3rem; }
         .ai-bot-btn, .big-redirect-btn, .contest-btn {
             padding: 1.2rem 2rem; font-size: 1.2rem; font-weight: 700; border: none; border-radius: 15px;
             text-decoration: none; text-align: center; color: #fff; transition: all 0.4s; position: relative; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.9) !important;
+            background: rgba(0, 0, 0, 0.9) !important; /* 우주 블랙 기본 */
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 229, 255, 0.5);
+            border: 1px solid rgba(0, 229, 255, 0.5); /* 네온 보더 */
+        }
+        .ai-bot-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            transform: scale(0); transition: transform 0.4s ease; z-index: -1;
         }
         .ai-bot-btn:hover {
-            transform: translateY(-8px) scale(1.05); 
-            box-shadow: 0 20px 50px rgba(0,229,255,0.5);
-            filter: brightness(1.1); 
-            color: #fff !important; 
-            border-color: rgba(0,229,255,1);
+            transform: translateY(-8px) scale(1.05); box-shadow: 0 20px 50px rgba(0,229,255,0.5);
+            filter: brightness(1.1); color: #fff !important; border-color: rgba(0,229,255,1);
         }
+        .ai-bot-btn:hover::before { transform: scale(1); }
+        .ai-bot-btn i { margin-right: 0.8rem; }
 
+        /* 각 버튼별 hover gradient */
+        .ai-bot-btn:nth-of-type(1)::before { background: linear-gradient(135deg, #00cec9, #4ecdc4); } /* 안녕봇 */
+        .ai-bot-btn:nth-of-type(2)::before { background: linear-gradient(135deg, #6c5ce7, #a29bfe); } /* 청구항 */
+        .ai-bot-btn:nth-of-type(3)::before { background: linear-gradient(135deg, #55a3ff, #45b7d1); } /* 상표 */
+        .ai-bot-btn:nth-of-type(4)::before { background: linear-gradient(135deg, #74b9ff, #0984e3); } /* 실습 */
+
+        /* 컨테스트 버튼: 우주 미래적 업그레이드 */
         .contest-btn {
             font-size: 1.6rem !important; padding: 1.5rem 3rem !important; border-radius: 25px !important;
-            background: rgba(0,0,0,0.9) !important;
+            background: rgba(0,0,0,0.9) !important; /* 블랙 기본 */
             border: 2px solid rgba(255,215,0,0.8) !important;
             box-shadow: 0 15px 40px rgba(255,215,0,0.3), 0 0 30px rgba(0,229,255,0.6) !important;
+            position: relative; overflow: hidden;
         }
+        .contest-btn::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(0,229,255,0.3) 50%, transparent 70%);
+            animation: sparkle 2s infinite; z-index: -1; transform: scale(0); transition: transform 0.4s;
+        }
+        .contest-btn::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #9b59b6, #00d2d3);
+            background-size: 400% 400%; animation: gradientShift 4s ease infinite;
+            transform: scale(0); transition: transform 0.4s; z-index: -1;
+        }
+        .contest-btn:hover::before, .contest-btn:hover::after { transform: scale(1); }
+        .contest-btn:hover {
+            box-shadow: 0 25px 60px rgba(255,215,0,0.6), 0 0 50px rgba(0,229,255,0.8) !important;
+            animation: neonPulse 1.5s infinite;
+        }
+        .contest-btn i { animation: trophySpin 2s linear infinite; font-size: 2rem; text-shadow: 0 0 15px #ffd700; }
+
+        /* 추가 애니메이션 */
+        @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes sparkle { 0%{transform:translate(0,0) scale(0) rotate(0deg)} 50%{transform:translate(25px,-25px) scale(1) rotate(90deg)} 100%{transform:translate(50px,-50px) scale(0) rotate(180deg)} }
+        @keyframes trophySpin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+        @keyframes neonPulse { 0%,100%{box-shadow: 0 0 20px rgba(0,229,255,0.5), 0 0 40px rgba(255,215,0,0.5);} 50%{box-shadow: 0 0 30px rgba(0,229,255,1), 0 0 60px rgba(255,215,0,1);} }
 
         .big-redirect-btn {
             font-size: 2rem !important; padding: 1.5rem 4rem !important; border-radius: 50px !important;
-            background: linear-gradient(135deg, #00E5FF, #A78BFA) !important; 
-            box-shadow: 0 25px 50px rgba(0,229,255,0.6) !important;
+            background: linear-gradient(135deg, #00E5FF, #A78BFA) !important; box-shadow: 0 25px 50px rgba(0,229,255,0.6) !important;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
-
-        .tpf-logo {
-            max-width: 320px;
-            filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.7));
-            transition: all 0.5s ease;
-            border-radius: 20px;
-            border: 2px solid rgba(0, 229, 255, 0.3);
-        }
-        .tpf-logo:hover {
-            transform: scale(1.08) rotate(2deg);
-            filter: drop-shadow(0 0 50px rgba(0, 229, 255, 0.9));
-            border-color: #00E5FF;
-        }
-
-        footer { 
-            text-align: center; 
-            padding: 60px 20px; 
-            opacity: 0.75; 
-            font-size: 0.95rem; 
-            background: linear-gradient(to top, #000, transparent);
-        }
+        .big-redirect-btn:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 30px 70px rgba(0,229,255,0.8); }
+        .alert { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3); color: #fff; }
+        .bg-light { background: rgba(255,255,255,0.02); }
+        .text-primary { color: #00E5FF !important; }
+        footer { text-align: center; padding: 50px; opacity: 0.7; font-size: 0.9rem; }
 
         @media (max-width: 768px) {
-            .big-redirect-btn { font-size: 1.3rem !important; padding: 1.2rem 2.5rem !important; width: 95% !important; max-width: 400px !important; }
+            .big-redirect-btn { font-size: 1.3rem !important; padding: 1.2rem 2.5rem !important; white-space: nowrap !important; flex-shrink: 0 !important; display: inline-block !important; width: 95% !important; max-width: 400px !important; }
+            #bots > div { padding: 0 10px; }
             .ai-bot-buttons { gap: 0.5rem; flex-direction: column; }
             header { background-attachment: scroll; }
-            .tpf-logo { max-width: 260px; }
+            .contest-btn { font-size: 1.4rem !important; padding: 1.2rem 2rem !important; }
         }
+
+        .logo-link {
+            display: inline-block; /* 클릭 영역 확보 */
+            text-decoration: none; /* 밑줄 제거 */
+            cursor: pointer; /* 손가락 커서 */
+            transition: all 0.3s ease;
+        }
+
+        .logo-link:hover .logo {
+            transform: scale(1.05); /* 살짝 확대 */
+            filter: drop-shadow(0 0 30px rgba(0,229,255,1)); /* 네온 강조 */
+            animation-duration: 1s; /* 호버 시 glow 속도 UP */
+        }
+
+
+
+
     </style>
 </head>
 <body>
 
+
     <canvas id="canvas"></canvas>
     <div class="cursor" id="cursor"></div>
 
-    <!-- 헤더 -->
+    <!-- 헤더: AI 코어 이미지 히어로 배너 -->
     <header>
         <div class="hero-content">
             <a href="#bots" class="logo-link">
@@ -193,7 +195,7 @@
         </div>
     </header>
 
-    <!-- AI 봇 버튼 -->
+    <!-- 나머지 섹션: 기존 그대로 (bots, purpose 등) -->
     <section id="bots">
         <div style="max-width: 1000px; margin: 0 auto;">
             <div class="ai-bot-buttons">
@@ -213,7 +215,7 @@
         </div>
     </section>
 
-    <!-- 서비스 목적 -->
+    <!-- service purpose ~ footer: 기존 코드 그대로 복사 (생략 없음, 전체 포함) -->
     <section id="purpose">
         <h2><i class="fas fa-bullseye"></i> 서비스 목적</h2>
         <div class="card">
@@ -227,7 +229,7 @@
         <div class="card">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <p><strong>방대한 자료 종합 고려</strong>: 판례, 심사기준, 진단사례, 내부 협의내용 등.</p>
-                <p><strong>기존 LLM 한계 극복</strong>: 학습 데이터 제한 + <strong>확증 편향</strong> + 환각 문제 + <strong>벡터화로 심사기준 미세 뉘앙스 이해 부족</strong></p>
+                <p><strong>기존 LLM 한계 극복</strong>: 학습 데이터 제한 + <strong>확증 편향(confirmation bias)</strong> + 환각 문제 + <strong>벡터화(embedding)로 심사기준 미세 뉘앙스 제대로 이해 못함</strong> → <em>정확성 확보 어려움</em>.</p>
             </div>
             <div style="margin-top: 2rem;">
                 <strong>솔루션</strong>:
@@ -242,7 +244,7 @@
         </div>
     </section>
 
-    <!-- 심사품질 AI의 특징 -->
+    <!-- 특징 -->
     <section id="features">
         <h2><i class="fas fa-star"></i> 심사품질 AI의 특징</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
@@ -303,53 +305,6 @@
         </div>
     </section>
 
-    <!-- ==================== 신규 섹션 ==================== -->
-    <section id="development-direction">
-        <h2><i class="fas fa-galaxy"></i> 심사품질 AI의 개발 방향</h2>
-        <p style="text-align:center; font-size:1.3rem; margin-bottom:40px; opacity:0.9; text-shadow:0 0 20px rgba(0,229,255,0.5);">
-            확장형 AI 업무 플랫폼을 향한 다음 단계
-        </p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2rem;">
-            
-            <!-- LoRA -->
-            <div class="card">
-                <div class="icon-box"><i class="fas fa-microchip"></i></div>
-                <h5>01. LoRA 모델 부가</h5>
-                <ul class="effect-list">
-                    <li><strong>도메인 특화 정확도 15~25% 향상</strong></li>
-                    <li>심사 기준·법령 해석·품질 지표를 정밀 학습</li>
-                    <li>0.1~1% 파라미터만으로 경량화 및 비용 절감</li>
-                    <li>법령 개정 시 LoRA만 교체 → 즉시 대응 가능</li>
-                </ul>
-            </div>
-
-            <!-- LLM Chaining -->
-            <div class="card">
-                <div class="icon-box"><i class="fas fa-link"></i></div>
-                <h5>02. LLM 체이닝 시스템</h5>
-                <ul class="effect-list">
-                    <li>Hugging Face 전문 모델들과 다단계 연결</li>
-                    <li>문서 요약 → 개체명 인식 → 논리 검증 → 최종 판단</li>
-                    <li>단일 모델의 오류를 체인 구조로 최소화</li>
-                    <li>필요 시 모델 즉시 교체 가능한 유연한 아키텍처</li>
-                </ul>
-            </div>
-
-            <!-- NeuroSymbolic -->
-            <div class="card">
-                <div class="icon-box"><i class="fas fa-brain"></i></div>
-                <h5>03. NeuroSymbolic 시스템 <span style="font-size:0.9rem; color:#FFD700;">(개발 중)</span></h5>
-                <ul class="effect-list">
-                    <li>신경망(Neural) + 상징적 추론(Symbolic) 결합</li>
-                    <li>법령·조건의 논리적 모순·누락 정확 탐지</li>
-                    <li><strong>설명 가능한 AI (Explainable AI)</strong> 구현</li>
-                    <li>복잡한 법률·기술 문서에 대한 이중 분석으로 고난도 심사 지원</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
     <!-- 기대 효과 -->
     <section id="effects">
         <h2><i class="fas fa-rocket"></i> 기대 효과</h2>
@@ -364,39 +319,27 @@
     <!-- 비전 -->
     <section id="vision">
         <h2><i class="fas fa-trophy"></i> 비전</h2>
-        <div class="card" style="text-align: center;">
-            <p style="font-size:1.25rem; line-height:1.6;">
-                단순 보조 도구가 아닌,<br>
-                <strong>살아있는 업무 동반자</strong>이자<br>
-                <span style="background: linear-gradient(90deg, #00E5FF, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    존재론적 스케일의 지능 시스템
-                </span>으로 진화합니다.
-            </p>
-            
-            <div style="margin-top: 3rem;">
-                <a href="https://protofelix.moip.ai.kr" target="_blank">
-                    <img src="TPFlogo.jpg" alt="Team ProtoFelix" class="tpf-logo">
+        <div class="card">
+            <p>단순 보조 도구가 아닌, <strong>살아있는 업무 동반자</strong>. 연구회 사례 지속 학습으로 국내 최고 AI 플랫폼 발전!</p>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="https://protofelix.moip.ai.kr" class="ai-bot-btn" style="background: linear-gradient(135deg, #A78BFA, #00E5FF); max-width: 300px; display: inline-block;">
+                    <i class="fas fa-users"></i>AI 개발팀 <span style="color: #FFD700;">Team Protofelix</span>
                 </a>
-                <p style="margin-top: 1.5rem; font-size: 1.5rem; font-weight: 700;">
-                    AI 개발팀 <span style="background: linear-gradient(45deg, #FFD700, #FF6B6B); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">TeamProtoFelix</span>
-                </p>
             </div>
         </div>
     </section>
 
     <!-- 푸터 -->
     <footer>
-        &copy; 2026 심사품질연구회 AI센터는 TeamProtoFelix에서 설계 및 공익적 서비스 제공
+        &copy; 2026 심사품질연구회 AI센터는 TeamProtofelix에서 설계 및 공익적 서비스 제공
     </footer>
 
     <script>
-        // 파티클 효과
+        // 파티클 (별)
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; 
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let particles = [];
-        
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -412,20 +355,12 @@
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
-                ctx.save(); 
-                ctx.globalAlpha = 0.8; 
-                ctx.fillStyle = this.color;
-                ctx.shadowColor = this.color; 
-                ctx.shadowBlur = 12;
-                ctx.beginPath(); 
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); 
-                ctx.fill(); 
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = 0.8; ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color; ctx.shadowBlur = 10;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); ctx.fill(); ctx.restore();
             }
         }
-        
         for (let i = 0; i < 200; i++) particles.push(new Particle());
-        
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
@@ -436,23 +371,30 @@
         // 커서
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', e => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
+            cursor.style.left = `${e.clientX}px`; cursor.style.top = `${e.clientY}px`;
         });
 
-        // 스크롤 애니메이션
+        // 스크롤 애니
         const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { 
-                if (entry.isIntersecting) entry.target.classList.add('visible'); 
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         });
         document.querySelectorAll('section').forEach(sec => observer.observe(sec));
 
         // 리사이즈
-        window.addEventListener('resize', () => { 
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight; 
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+
+        document.querySelector('.logo-link').addEventListener('click', function(e) {
+            e.preventDefault(); // 기본 점프 방지
+            const target = document.querySelector('#bots');
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',  // 부드러운 스크롤
+                    block: 'start'       // 상단 포커싱
+                });
+            }
         });
+
     </script>
 </body>
 </html>
