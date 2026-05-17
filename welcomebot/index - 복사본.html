@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>안녕봇 • 심사품질연구회</title>
+<style>
+    /* 기존 스타일 그대로 유지 */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&amp;family=Noto+Sans+KR:wght@300;400;500&amp;display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+        font-family: 'Noto Sans KR', 'Orbitron', monospace;
+        background: radial-gradient(ellipse at center, #0a0a23 0%, #000 70%);
+        color: #fff;
+        min-height: 100vh;
+    }
+    
+    .chat-container {
+        max-width: 920px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+    
+    .logo {
+        font-size: 3.2rem;
+        font-weight: 900;
+        background: linear-gradient(45deg, #00E5FF, #A78BFA, #00E5FF);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .chat-window {
+        background: rgba(10, 10, 35, 0.85);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        border-radius: 24px;
+        height: 620px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    .chat-header {
+        padding: 18px 24px;
+        background: rgba(0, 229, 255, 0.08);
+        border-bottom: 1px solid rgba(0,229,255,0.2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    
+    .message {
+        max-width: 85%;
+        padding: 16px 20px;
+        border-radius: 20px;
+        line-height: 1.6;
+        font-size: 0.98rem;
+    }
+    
+    .bot-message {
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        align-self: flex-start;
+    }
+    
+    .user-message {
+        background: rgba(167, 139, 250, 0.15);
+        border: 1px solid rgba(167, 139, 250, 0.4);
+        align-self: flex-end;
+    }
+    
+    .input-area {
+        padding: 20px 24px;
+        background: rgba(0,0,0,0.4);
+        border-top: 1px solid rgba(0,229,255,0.2);
+        display: flex;
+        gap: 12px;
+    }
+    
+    #user-input {
+        flex: 1;
+        padding: 14px 20px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(0,229,255,0.3);
+        border-radius: 50px;
+        color: white;
+        font-size: 1rem;
+        outline: none;
+    }
+    
+    #send-btn {
+        padding: 14px 28px;
+        background: linear-gradient(45deg, #00E5FF, #00B4D8);
+        border: none;
+        border-radius: 50px;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    
+    .layer-log {
+        font-size: 0.75rem;
+        opacity: 0.6;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(0,229,255,0.2);
+    }
+</style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header" style="text-align:center; margin-bottom:30px;">
+            <div class="logo">안녕봇</div>
+            <div class="sub-title">심사품질연구회의 영원한 집사 AI</div>
+        </div>
+        
+        <div class="chat-window">
+            <div class="chat-header">
+                <div class="holo-dot" style="width:12px;height:12px;background:#00E5FF;border-radius:50%;box-shadow:0 0 15px #00E5FF;"></div>
+                <div><strong>안녕봇</strong> <span style="font-size:0.85rem;opacity:0.7;">— Grok 연결됨</span></div>
+            </div>
+            
+            <div id="chat-messages" class="chat-messages"></div>
+            
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="직원님, 어떤 도움이 필요하신가요?" onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button id="send-btn" onclick="sendMessage()">전송</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+const chatMessages = document.getElementById('chat-messages');
+let messageHistory = [
+    {
+        role: "system",
+        content: "너는 특허, 상표, 디자인 분야 심사품질담당관실의 전용 AI '안녕봇'이다. 직원들을 따뜻하고 정중하게 대하며, 심사품질 관련 질문에 전문적으로 답변한다."
+    }
+];
+
+// 메시지 추가 함수
+function addMessage(content, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+    
+    if (isUser) {
+        msgDiv.innerHTML = content;
+    } else {
+        msgDiv.innerHTML = content;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return msgDiv;
+}
+
+// Grok API 호출
+async function callGrokAPI(userMessage) {
+    messageHistory.push({ role: "user", content: userMessage });
+
+    try {
+        const response = await fetch('/api/grok', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: "grok-4.20-0309-non-reasoning",           
+                messages: messageHistory,
+                max_tokens: 50000,
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        const botReply = data.choices[0].message.content;
+        messageHistory.push({ role: "assistant", content: botReply });
+
+        return botReply;
+
+    } catch (error) {
+        console.error(error);
+        return "죄송합니다. 현재 Grok API와 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.";
+    }
+}
+
+// 메시지 전송
+async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    // 사용자 메시지 표시
+    addMessage(userText, true);
+    input.value = '';
+
+    // 로딩 메시지
+    const loadingMsg = addMessage("안녕봇이 생각 중입니다...", false);
+
+    // Grok 호출
+    const botReply = await callGrokAPI(userText);
+
+    // 로딩 메시지 제거 후 실제 응답 표시
+    loadingMsg.remove();
+    addMessage(botReply, false);
+}
+
+// 초기 인사
+window.onload = function() {
+    setTimeout(() => {
+        const initialMsg = `직원님, 안녕하세요.<br>오늘도 심사품질을 지키는 소중한 하루가 되길 바랍니다.<br>무엇을 도와드릴까요?`;
+        addMessage(initialMsg, false);
+    }, 600);
+}
+</script>
+</body>
+</html>
