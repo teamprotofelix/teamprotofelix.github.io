@@ -225,12 +225,6 @@
 
     // 챗봇 로직
     const chatMessages = document.getElementById('chat-messages');
-    let messageHistory = [
-        {
-            role: "system",
-            content: "너는 특허, 상표, 디자인 분야 심사품질담당관실의 전용 AI '안녕봇'이다. 직원들을 따뜻하고 정중하게 대하며, 심사품질 관련 질문에 전문적으로 답변한다."
-        }
-    ];
 
     function addMessage(content, isUser = false) {
         const msgDiv = document.createElement('div');
@@ -241,34 +235,6 @@
         return msgDiv;
     }
 
-    async function callGrokAPI(userMessage) {
-        messageHistory.push({ role: "user", content: userMessage });
-
-        try {
-            const response = await fetch('/api/grok', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    model: "grok-4.20-0309-non-reasoning",
-                    messages: messageHistory,
-                    max_tokens: 50000,
-                    temperature: 0.7
-                })
-            });
-
-            const data = await response.json();
-            if (data.error) throw new Error(data.error);
-
-            const botReply = data.choices[0].message.content;
-            messageHistory.push({ role: "assistant", content: botReply });
-            return botReply;
-
-        } catch (error) {
-            console.error(error);
-            return "죄송합니다. 현재 Grok API와 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.";
-        }
-    }
-
     async function sendMessage() {
         const input = document.getElementById('user-input');
         const userText = input.value.trim();
@@ -277,11 +243,10 @@
         addMessage(userText, true);
         input.value = '';
 
-        const loadingMsg = addMessage("안녕봇이 생각 중입니다...", false);
-        const botReply = await callGrokAPI(userText);
-
-        loadingMsg.remove();
-        addMessage(botReply, false);
+        // API 호출 없이 바로 고정 메시지 출력
+        setTimeout(() => {
+            addMessage("내부망으로 이사했어요. 거기서 만나요~", false);
+        }, 400);
     }
 
     window.onload = function() {
@@ -290,6 +255,7 @@
             addMessage(initialMsg, false);
         }, 600);
     }
+
 </script>
 </body>
 </html>
