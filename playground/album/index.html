@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>혜담과 아림이의 업적</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); 
+            color: #333; 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            padding: 30px; 
+            background: rgba(255,255,255,0.8); 
+            border-radius: 25px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+        }
+        h1 { 
+            font-size: 3em; 
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            margin-bottom: 10px; 
+            font-weight: 800; 
+        }
+        .subtitle { font-size: 1.4em; color: #666; }
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+        }
+        .item { 
+            position: relative; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            transition: all 0.4s ease; 
+            cursor: pointer; 
+            height: 250px; 
+            background: #f8f9fa; 
+        }
+        .item:hover { 
+            transform: translateY(-12px) scale(1.03); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3); 
+        }
+        .item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;  /* 썸네일 crop 최적화 – 대용량 빠름 */
+            display: block; 
+            loading: lazy; 
+        }
+        .modal { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000; 
+            padding: 20px; 
+        }
+        .modal img { 
+            max-width: 95%; 
+            max-height: 95%; 
+            border-radius: 12px; 
+            box-shadow: 0 0 60px rgba(255,255,255,0.3); 
+            object-fit: contain; 
+        }
+        .close { 
+            position: absolute; 
+            top: 40px; right: 40px; 
+            color: #fff; 
+            font-size: 50px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.8); 
+            transition: 0.3s; 
+        }
+        .close:hover { color: #00E5FF; transform: scale(1.2); }
+        .stats { 
+            text-align: center; 
+            font-size: 1.2em; 
+            margin-top: 30px; 
+            color: #666; 
+        }
+        @media (max-width: 768px) { 
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } 
+            h1 { font-size: 2.2em; } 
+            .header { padding: 20px; margin-bottom: 30px; } 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌸 혜담 아림의 업적 달성</h1>
+        <p class="subtitle">추억을 담은 사진 앨범</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="stats" id="stats">60+ 사진 로딩 중...</div>
+    <div class="modal" id="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImg" src="" alt="업적 리스트">
+    </div>
+
+    <script>
+        // 모든 파일명 (은재님 목록 그대로!)
+        const images = [
+'photo01.jpg', 'photo02.jpg', 'photo03.jpg', 'photo04.jpg', 'photo05.jpg', 'photo06.gif', 'photo07.gif', 'photo08.jpg', 'photo09.jpg', 'photo10.jpg'
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const stats = document.getElementById('stats');
+
+        images.forEach((filename, index) => {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.onclick = () => openModal(`./${filename}`);
+            item.innerHTML = `<img src="./${filename}" alt="${filename}" loading="lazy" onerror="this.parentNode.remove()">`;
+            gallery.appendChild(item);
+        });
+
+        stats.textContent = `${images.length}장의 업적`;
+
+        function openModal(src) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modalImg').src = src;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+        document.getElementById('modal').onclick = (e) => e.target.classList.contains('modal') && closeModal();
+    </script>
+</body>
+</html>
