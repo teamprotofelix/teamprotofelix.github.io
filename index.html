@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect to Futures . . .</title>
+
+    <!-- PWA 필수 메타태그 & manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a1f">  <!-- 어두운 우주 배경색 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -177,6 +184,19 @@
         // 4. 페이지 로드 시 별 생성 (이미지는 이미 위에서 설정됨)
         // ----------------------------------------------
         window.onload = createStars;
+
+
+        // ========== PWA: Service Worker 등록 (추가) ==========
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('Service Worker 등록 성공:', registration.scope);
+                }).catch(function(error) {
+                    console.log('Service Worker 등록 실패:', error);
+                });
+            });
+        }
     </script>
+
 </body>
 </html>
