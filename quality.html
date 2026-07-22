@@ -220,12 +220,16 @@
         }
 
         .main-logo {
-            max-width: min(720px, 100%);
-            width: 100%;
+            max-width: min(640px, 100%);
+            width: auto;
+            height: auto;
+            max-height: min(42vh, 360px);
             display: block;
             margin: 0 auto 1.1rem;
+            object-fit: contain;
+            object-position: center;
             filter: drop-shadow(0 0 36px rgba(0, 229, 255, 0.75));
-            border-radius: 20px;
+            border-radius: 16px;
         }
 
         .main-title {
@@ -451,6 +455,17 @@
         .badge-beta { background: rgba(251, 191, 36, 0.95); color: #1c1917; }
         .badge-new { background: linear-gradient(135deg, #00E5FF, #A78BFA); color: #041016; }
         .badge-event { background: rgba(255, 215, 0, 0.95); color: #1c1917; }
+        .badge-paused {
+            background: rgba(100, 116, 139, 0.95);
+            color: #f8fafc;
+            border: 1px solid rgba(226, 232, 240, 0.35);
+        }
+        .service-card[data-status="paused"] {
+            opacity: 0.92;
+        }
+        .service-card[data-status="paused"] .service-thumb {
+            filter: grayscale(0.25);
+        }
 
         .service-body {
             padding: 1.1rem 1.15rem 1.25rem;
@@ -787,7 +802,7 @@
 
     <header class="hero" id="top">
         <div class="hero-content">
-            <img src="QAlogo.jpg" alt="심사품질 AI센터 로고" class="main-logo" width="800" height="450" decoding="async">
+            <img src="QAlogo.jpg" alt="심사품질 AI센터 로고" class="main-logo" decoding="async">
             <h1 class="main-title">Examination Quality AI</h1>
             <p class="header-subtitle">
                 <span class="i18n-block-ko">
@@ -1193,7 +1208,11 @@
             // Mark hub visit for opening journey
             try { localStorage.setItem('moip_visited_hub', '1'); } catch (e) {}
 
+            // 배지 정렬 우선순위: 운영 중 → 이벤트 → 베타 → 휴면/일시정지
+            const BADGE_ORDER = { live: 0, event: 1, beta: 2, paused: 3, new: 1 };
+
             const SERVICES = [
+                // ----- 운영 중 -----
                 {
                     id: 'notice',
                     category: 'daily',
@@ -1229,23 +1248,6 @@
                     keywords: 'case consultation welcome 사례 관리'
                 },
                 {
-                    id: 'contest',
-                    category: 'lab',
-                    href: 'https://moip.ai.kr/contest/',
-                    img: 'contestlogo.jpg',
-                    badge: 'event',
-                    badgeKo: '이벤트',
-                    badgeEn: 'Event',
-                    titleKo: '심사품질연구회 AI 컨테스트',
-                    titleEn: 'AI Contest',
-                    enLabel: 'Contest Arena',
-                    descKo: '실험적 AI 프로토타입과 컨테스트 작품을 체험합니다.',
-                    descEn: 'Explore experimental AI prototypes and contest entries.',
-                    audienceKo: '연구·학습',
-                    audienceEn: 'Research & learning',
-                    keywords: 'contest ai 컨테스트 실험'
-                },
-                {
                     id: 'quality',
                     category: 'diagnosis',
                     href: 'https://quality.moip.ai.kr',
@@ -1263,23 +1265,6 @@
                     keywords: 'quality diagnosis 진단관 지원'
                 },
                 {
-                    id: 'openmodel',
-                    category: 'model',
-                    href: 'https://lulu.moip.ai.kr',
-                    img: 'OWMlogo.jpg',
-                    badge: 'beta',
-                    badgeKo: '베타',
-                    badgeEn: 'Beta',
-                    titleKo: 'Open Weights LLM Model',
-                    titleEn: 'Open Weights LLM',
-                    enLabel: 'Open Model',
-                    descKo: '오픈 웨이트 모델을 활용한 실험·추론 환경입니다.',
-                    descEn: 'Experiment and reason with open-weight language models.',
-                    audienceKo: '연구·개발',
-                    audienceEn: 'R&D',
-                    keywords: 'open model llm lulu owm weights'
-                },
-                {
                     id: 'claims',
                     category: 'diagnosis',
                     href: 'https://claims.moip.ai.kr/',
@@ -1295,10 +1280,103 @@
                     audienceKo: '특허 실무',
                     audienceEn: 'Patent practice',
                     keywords: 'claims patent 청구범위 리뷰'
+                },
+                {
+                    id: 'openmodel',
+                    category: 'model',
+                    href: 'https://lulu.moip.ai.kr',
+                    img: 'OWMlogo.jpg',
+                    badge: 'live',
+                    badgeKo: '운영 중',
+                    badgeEn: 'Live',
+                    titleKo: 'Open Weights LLM Model',
+                    titleEn: 'Open Weights LLM',
+                    enLabel: 'Open Model',
+                    descKo: '오픈 웨이트 모델을 활용한 실험·추론 환경입니다.',
+                    descEn: 'Experiment and reason with open-weight language models.',
+                    audienceKo: '연구·개발',
+                    audienceEn: 'R&D',
+                    keywords: 'open model llm lulu owm weights'
+                },
+                {
+                    id: 'contest',
+                    category: 'lab',
+                    href: 'https://moip.ai.kr/contest/',
+                    img: 'contestlogo.jpg',
+                    badge: 'event',
+                    badgeKo: '이벤트',
+                    badgeEn: 'Event',
+                    titleKo: '심사품질연구회 AI 컨테스트',
+                    titleEn: 'AI Contest',
+                    enLabel: 'Contest Arena',
+                    descKo: '실험적 AI 프로토타입과 컨테스트 작품을 체험합니다.',
+                    descEn: 'Explore experimental AI prototypes and contest entries.',
+                    audienceKo: '연구·학습',
+                    audienceEn: 'Research & learning',
+                    keywords: 'contest ai 컨테스트 실험'
+                },
+                // ----- 베타 -----
+                {
+                    id: 'search-agent',
+                    category: 'diagnosis',
+                    href: 'https://patent.moip.ai.kr',
+                    img: 'searchlogo.jpg',
+                    badge: 'beta',
+                    badgeKo: '베타',
+                    badgeEn: 'Beta',
+                    titleKo: '특실 검색 에이전트',
+                    titleEn: 'Patent Search Agent',
+                    enLabel: 'Prior-Art Search',
+                    descKo: '특허청구범위를 넣으면 AI가 유사 선행기술을 찾아 순위를 매기는 검색 서비스입니다.',
+                    descEn: 'Paste claims—AI finds and ranks similar prior art.',
+                    audienceKo: '특허 실무',
+                    audienceEn: 'Patent practice',
+                    keywords: 'search agent prior art 특실 검색 선행기술 청구범위 patent'
+                },
+                // ----- 휴면 / 일시정지 -----
+                {
+                    id: 'welcomebot',
+                    category: 'daily',
+                    href: 'https://moip.ai.kr/welcomebot',
+                    img: 'welcomebotlogo.jpg',
+                    badge: 'paused',
+                    badgeKo: '휴면',
+                    badgeEn: 'Paused',
+                    titleKo: '안녕봇',
+                    titleEn: 'Welcome Bot',
+                    enLabel: 'Internal Notice',
+                    descKo: '심사품질 안내 챗봇. 현재 내부망으로 이전되어 공개망에서는 휴면 상태입니다.',
+                    descEn: 'Quality welcome bot—migrated to internal network (public pause).',
+                    audienceKo: '전체',
+                    audienceEn: 'Everyone',
+                    keywords: 'welcome 안녕봇 휴면 내부망'
+                },
+                {
+                    id: 'trademarkbot',
+                    category: 'diagnosis',
+                    href: 'https://moip.ai.kr/trademarkbot/',
+                    img: 'trademarkbotlogo.jpg',
+                    badge: 'paused',
+                    badgeKo: '일시정지',
+                    badgeEn: 'Paused',
+                    titleKo: '상표·디자인 비교봇',
+                    titleEn: 'Trademark & Design Compare',
+                    enLabel: 'TM / Design',
+                    descKo: '상표·디자인 심사 비교 분석 서비스. 현재 일시정지 상태입니다.',
+                    descEn: 'Trademark & design comparison for examination—currently paused.',
+                    audienceKo: '상표·디자인',
+                    audienceEn: 'TM & Design',
+                    keywords: 'trademark design 상표 디자인 비교봇 일시정지'
                 }
             ];
 
-            const badgeClass = { live: 'badge-live', beta: 'badge-beta', new: 'badge-new', event: 'badge-event' };
+            const badgeClass = {
+                live: 'badge-live',
+                beta: 'badge-beta',
+                new: 'badge-new',
+                event: 'badge-event',
+                paused: 'badge-paused'
+            };
 
             function isExternal(href) {
                 try {
@@ -1312,7 +1390,12 @@
             function renderServices() {
                 const grid = document.getElementById('serviceGrid');
                 const lang = document.documentElement.lang === 'en' ? 'en' : 'ko';
-                grid.innerHTML = SERVICES.map(function (s) {
+                const ordered = SERVICES.slice().sort(function (a, b) {
+                    const pa = BADGE_ORDER[a.badge] != null ? BADGE_ORDER[a.badge] : 9;
+                    const pb = BADGE_ORDER[b.badge] != null ? BADGE_ORDER[b.badge] : 9;
+                    return pa - pb;
+                });
+                grid.innerHTML = ordered.map(function (s) {
                     const title = lang === 'en' ? s.titleEn : s.titleKo;
                     const desc = lang === 'en' ? s.descEn : s.descKo;
                     const audience = lang === 'en' ? s.audienceEn : s.audienceKo;
@@ -1324,8 +1407,9 @@
                     const extIcon = external ? ' <i class="fas fa-external-link-alt" aria-hidden="true" style="font-size:0.75em"></i>' : '';
                     return (
                         '<a class="service-card" href="' + s.href + '" target="' + target + '" rel="' + rel + '"' +
-                        ' data-category="' + s.category + '" data-keywords="' + s.keywords.toLowerCase() + ' ' + s.titleKo.toLowerCase() + ' ' + s.titleEn.toLowerCase() + '"' +
-                        ' aria-label="' + title + (external ? (lang === 'en' ? ' (opens in new tab)' : ' (새 탭)') : '') + '">' +
+                        ' data-category="' + s.category + '" data-status="' + s.badge + '"' +
+                        ' data-keywords="' + s.keywords.toLowerCase() + ' ' + s.titleKo.toLowerCase() + ' ' + s.titleEn.toLowerCase() + '"' +
+                        ' aria-label="' + title + ' · ' + badge + (external ? (lang === 'en' ? ' (opens in new tab)' : ' (새 탭)') : '') + '">' +
                         '<div class="service-thumb">' +
                         '<span class="badge ' + (badgeClass[s.badge] || 'badge-live') + '">' + badge + '</span>' +
                         '<img src="' + s.img + '" alt="" width="640" height="360" loading="lazy" decoding="async"' +
