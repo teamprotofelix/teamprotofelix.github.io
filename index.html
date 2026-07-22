@@ -3,47 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect to Futures . . .</title>
-
-    <!-- PWA 필수 메타태그 & manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a1f">  <!-- 어두운 우주 배경색 -->
+    <title>moip.ai.kr | Connect to Futures</title>
+    <meta name="description" content="심사품질 AI · 지식재산 심사 동반 공간. 특허·상표·디자인 심사품질을 위한 AI 허브로 연결합니다.">
+    <meta name="theme-color" content="#0a0a1f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="moip.ai.kr | Connect to Futures">
+    <meta property="og:description" content="심사품질 AI · 지식재산 심사 동반 공간">
+    <meta property="og:image" content="https://moip.ai.kr/aicenter.jpg">
+    <meta property="og:url" content="https://moip.ai.kr/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --bg-deep: #05050f;
+            --bg-mid: #0a0a1f;
+            --text: #e0f2fe;
+            --muted: #94a3b8;
+            --cyan: #67e8f9;
+            --violet: #c084fc;
+            --focus: #67e8f9;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', 'Roboto', sans-serif;
-            color: #e0f2fe;
-            background: radial-gradient(ellipse at center, #0a0a1f 0%, #05050f 100%);
+            font-family: 'Noto Sans KR', system-ui, sans-serif;
+            color: var(--text);
+            background: radial-gradient(ellipse at center, var(--bg-mid) 0%, var(--bg-deep) 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             position: relative;
-            transition: opacity 0.6s ease;
+            opacity: 0;
+            transition: opacity 0.7s ease;
         }
 
-        .stars {
+        body.is-ready { opacity: 1; }
+        body.is-leaving { opacity: 0; pointer-events: none; }
+
+        #stars-canvas {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
             pointer-events: none;
         }
-        .star {
+
+        .skip-link {
             position: absolute;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #67e8f9, 0 0 12px #a78bfa;
-            animation: twinkle 1.5s infinite ease-in-out alternate;
+            left: -9999px;
+            top: 0;
+            z-index: 100;
+            padding: 0.75rem 1.25rem;
+            background: #0ea5e9;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 0 0 8px 0;
+            text-decoration: none;
         }
-        @keyframes twinkle {
-            0% { opacity: 0.3; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
+        .skip-link:focus {
+            left: 0;
+            outline: 3px solid #fff;
+            outline-offset: 2px;
         }
 
         .container {
@@ -51,153 +87,499 @@
             z-index: 2;
             max-width: 1100px;
             width: 100%;
-            padding: 40px 20px;
+            padding: 32px 20px 40px;
             text-align: center;
         }
-        .subtitle {
-            font-size: 1.50rem;
-            color: #94a3b8;
-            margin-bottom: 40px;
-            letter-spacing: 0.5px;
+
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            opacity: 0.85;
+            margin-bottom: 0.75rem;
         }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.6rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, #67e8f9, #bae6fd, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.6rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--muted);
+            margin-bottom: 0.35rem;
+            letter-spacing: 0.02em;
+            line-height: 1.55;
+        }
+
+        .tagline {
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            color: #cbd5e1;
+            margin-bottom: 1.75rem;
+            opacity: 0.95;
+        }
+        .tagline strong {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
         .image-wrapper {
             position: relative;
             display: inline-block;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(103, 232, 249, 0.2);
-            max-width: 100%;
+            border: 1px solid rgba(103, 232, 249, 0.22);
+            max-width: min(920px, 100%);
+            width: 100%;
+            background: rgba(10, 10, 35, 0.6);
+            aspect-ratio: 16 / 10;
         }
+
         .image-wrapper img {
             display: block;
             width: 100%;
-            height: auto;
-            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1.03);
+            transition: opacity 0.8s ease, transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease;
         }
-        .image-wrapper:hover img {
-            transform: scale(1.07) rotate(0.8deg);
-            filter: brightness(1.1) saturate(1.15);
+
+        .image-wrapper img.is-loaded {
+            opacity: 1;
+            transform: scale(1);
         }
+
+        .image-wrapper:hover img.is-loaded,
+        .image-wrapper:focus-within img.is-loaded {
+            transform: scale(1.05);
+            filter: brightness(1.08) saturate(1.12);
+        }
+
+        .image-skeleton {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+            z-index: 0;
+        }
+        .image-wrapper.loaded .image-skeleton { display: none; }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         .hover-area {
             position: absolute;
-            top: 28%; left: 18%;
-            width: 64%; height: 46%;
+            inset: 0;
             z-index: 10;
             cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .hover-area:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: -6px;
+            border-radius: 24px;
+        }
+
         .hover-text {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.85);
-            font-size: clamp(2.2rem, 8vw, 4.2rem);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.6rem, 6vw, 3.4rem);
             font-weight: 800;
             opacity: 0;
-            transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(0.9);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             background: linear-gradient(90deg, #67e8f9, #bae6fd, #c084fc);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            pointer-events: none;
+            padding: 0.5rem 1rem;
+            text-align: center;
+        }
+
+        /* Desktop hover reveal */
+        @media (hover: hover) and (pointer: fine) {
+            .hover-area:hover .hover-text,
+            .hover-area:focus-visible .hover-text {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .hover-area:hover::before,
+            .hover-area:focus-visible::before {
+                opacity: 1;
+            }
+        }
+
+        .hover-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(5, 5, 20, 0.55) 0%, rgba(5, 5, 15, 0.75) 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
             pointer-events: none;
         }
-        .hover-area:hover .hover-text {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+
+        /* Touch: soft always-on hint */
+        @media (hover: none) {
+            .hover-area::before { opacity: 0.35; }
+            .hover-text {
+                opacity: 0.9;
+                transform: scale(1);
+                font-size: clamp(1.2rem, 5vw, 2rem);
+            }
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            justify-content: center;
+            margin-top: 1.75rem;
+        }
+
+        .btn {
+            font-family: 'Noto Sans KR', system-ui, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 0.95rem 1.75rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+            min-height: 48px;
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        .btn-primary {
+            color: #0b1220;
+            background: linear-gradient(135deg, #67e8f9, #a78bfa);
+            box-shadow: 0 12px 36px rgba(103, 232, 249, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 44px rgba(103, 232, 249, 0.5);
+        }
+
+        .btn-ghost {
+            color: var(--text);
+            background: rgba(15, 23, 42, 0.55);
+            border-color: rgba(103, 232, 249, 0.35);
+            backdrop-filter: blur(8px);
+        }
+        .btn-ghost:hover {
+            transform: translateY(-2px);
+            border-color: rgba(103, 232, 249, 0.75);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .hint {
+            margin-top: 1.1rem;
+            font-size: 0.92rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .footer-note {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .return-banner {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            max-width: min(520px, calc(100% - 24px));
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(103, 232, 249, 0.35);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+            text-align: center;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+        }
+        .return-banner.is-visible { display: block; }
+        .return-banner strong { color: var(--cyan); }
+        .return-banner .countdown { color: #fbbf24; font-weight: 700; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            body { transition: none; }
+            .image-wrapper img { transition: opacity 0.2s ease; }
         }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+    <a class="skip-link" href="quality.html">서비스 허브로 바로 이동</a>
 
-    <div class="container">
-        <p class="subtitle">미래를 연결하는 지능의 공간</p>
-        <div class="image-wrapper">
-            <!-- id 추가: 랜덤 이미지 제어용 -->
-            <img id="randomImage" src="" alt="AI Futures">
-            <a href="quality.html" class="hover-area" id="transition-link">
-                <div class="hover-text">Connect to Futures</div>
-            </a>
+    <canvas id="stars-canvas" aria-hidden="true"></canvas>
+
+    <div id="returnBanner" class="return-banner" role="status" aria-live="polite">
+        다시 오셨네요. <strong>서비스 허브</strong>로 <span class="countdown" id="countdown">3</span>초 후 이동합니다.
+        <div class="actions" style="margin-top: 0.65rem;">
+            <button type="button" class="btn btn-primary" id="goNowBtn" style="padding: 0.55rem 1.1rem; font-size: 0.9rem;">지금 이동</button>
+            <button type="button" class="btn btn-ghost" id="stayBtn" style="padding: 0.55rem 1.1rem; font-size: 0.9rem;">오프닝 보기</button>
         </div>
-        <p class="subtitle" style="margin-top: 38px;">
-            이곳은 별들이 기다리는 장소입니다.
-        </p>           
     </div>
 
+    <main class="container" id="main">
+        <p class="brand">moip.ai.kr</p>
+        <h1 class="title">Connect to Futures</h1>
+        <p class="subtitle">미래를 연결하는 지능의 공간</p>
+        <p class="tagline">
+            <strong>심사품질 AI</strong> · 지식재산 심사 동반 공간<br>
+            특허·상표·디자인 심사품질의 객관성·정확성·일관성을 지원합니다.
+        </p>
+
+        <div class="image-wrapper" id="imageWrapper">
+            <div class="image-skeleton" aria-hidden="true"></div>
+            <img id="randomImage" src="" alt="AI Futures 히어로 이미지" width="1600" height="1000">
+            <a href="quality.html" class="hover-area" id="transition-link" aria-label="서비스 허브로 입장 — Connect to Futures">
+                <span class="hover-text">Connect to Futures</span>
+            </a>
+        </div>
+
+        <div class="actions">
+            <a href="quality.html" class="btn btn-primary" id="enterBtn">입장하기 · Connect</a>
+            <button type="button" class="btn btn-ghost" id="skipOpeningBtn" title="다음부터 오프닝을 건너뜁니다">다음부터 스킵</button>
+        </div>
+        <p class="hint" id="hintText">
+            이미지 또는 버튼을 눌러 심사품질 AI 허브로 이동합니다.<br>
+            재방문 시 오프닝을 건너뛰려면 「다음부터 스킵」을 선택하세요.
+        </p>
+        <p class="footer-note">이곳은 별들이 기다리는 장소입니다.</p>
+    </main>
+
     <script>
-        // ----------------------------------------------
-        // 1. 랜덤 이미지 설정
-        // ----------------------------------------------
-        // ★ 여기에 표시할 이미지 파일명들을 추가/수정하세요 ★
-        const images = [
-            "aicenter.jpg",          // 기존 이미지
-            "futures01.jpg",         // 예시 1
-            "futures02.jpg" 
-        ];
+        (function () {
+            const STORAGE_SKIP = 'moip_skip_opening';
+            const STORAGE_VISITED = 'moip_visited_hub';
+            const images = ['aicenter.jpg', 'futures01.jpg', 'futures02.jpg'];
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // 랜덤 인덱스 선택
-        const randomIndex = Math.floor(Math.random() * images.length);
-        const selectedImage = images[randomIndex];
+            const body = document.body;
+            const imgEl = document.getElementById('randomImage');
+            const imageWrapper = document.getElementById('imageWrapper');
+            const returnBanner = document.getElementById('returnBanner');
+            const countdownEl = document.getElementById('countdown');
+            let autoTimer = null;
+            let countdownTimer = null;
 
-        // 이미지 src 설정 (이미지가 같은 폴더에 있다고 가정)
-        const imgElement = document.getElementById('randomImage');
-        if (imgElement) {
-            imgElement.src = selectedImage;
-            // (선택) 이미지 로딩 실패 시 대체 이미지 처리
-            imgElement.onerror = function() {
-                console.warn(`이미지를 불러올 수 없습니다: ${selectedImage}`);
-                this.src = "aicenter.jpg";  // fallback
-            };
-        }
-
-        // ----------------------------------------------
-        // 2. 별 생성 (기존 그대로)
-        // ----------------------------------------------
-        function createStars() {
-            const container = document.getElementById('stars');
-            for (let i = 0; i < 180; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 3 + 1;
-                star.style.width = star.style.height = `${size}px`;
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                star.style.animationDuration = `${Math.random() * 2 + 1.2}s`;
-                container.appendChild(star);
+            function goToHub(markSkip) {
+                if (markSkip) {
+                    try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
+                }
+                leaveAndNavigate('quality.html');
             }
-        }
 
-        // ----------------------------------------------
-        // 3. 부드러운 페이지 전환 (기존 그대로)
-        // ----------------------------------------------
-        const link = document.getElementById('transition-link');
-        if (link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const href = this.getAttribute('href');
-                document.body.style.transition = 'opacity 0.6s ease';
-                document.body.style.opacity = '0';
-                setTimeout(function() {
+            function leaveAndNavigate(href) {
+                if (autoTimer) clearTimeout(autoTimer);
+                if (countdownTimer) clearInterval(countdownTimer);
+                body.classList.add('is-leaving');
+                const delay = reducedMotion ? 0 : 600;
+                setTimeout(function () {
                     window.location.href = href;
-                }, 600);
-            });
-        }
+                }, delay);
+            }
 
-        // ----------------------------------------------
-        // 4. 페이지 로드 시 별 생성 (이미지는 이미 위에서 설정됨)
-        // ----------------------------------------------
-        window.onload = createStars;
+            // ---- Return-visit auto redirect ----
+            let skipOpening = false;
+            try {
+                skipOpening = localStorage.getItem(STORAGE_SKIP) === '1';
+            } catch (e) {}
 
+            const params = new URLSearchParams(window.location.search);
+            const forceOpening = params.get('opening') === '1' || params.get('show') === 'opening';
 
-        // ========== PWA: Service Worker 등록 (추가) ==========
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                    console.log('Service Worker 등록 성공:', registration.scope);
-                }).catch(function(error) {
-                    console.log('Service Worker 등록 실패:', error);
+            if (skipOpening && !forceOpening) {
+                // Immediate soft redirect with cancel option
+                returnBanner.classList.add('is-visible');
+                let left = 3;
+                countdownEl.textContent = String(left);
+                countdownTimer = setInterval(function () {
+                    left -= 1;
+                    countdownEl.textContent = String(left);
+                    if (left <= 0) {
+                        clearInterval(countdownTimer);
+                        goToHub(false);
+                    }
+                }, 1000);
+                autoTimer = setTimeout(function () { goToHub(false); }, 3000);
+
+                document.getElementById('goNowBtn').addEventListener('click', function () {
+                    goToHub(false);
                 });
-            });
-        }
-    </script>
+                document.getElementById('stayBtn').addEventListener('click', function () {
+                    if (autoTimer) clearTimeout(autoTimer);
+                    if (countdownTimer) clearInterval(countdownTimer);
+                    returnBanner.classList.remove('is-visible');
+                    try { localStorage.removeItem(STORAGE_SKIP); } catch (e) {}
+                    body.classList.add('is-ready');
+                });
+            } else {
+                body.classList.add('is-ready');
+            }
 
+            // ---- Image preload ----
+            const selected = images[Math.floor(Math.random() * images.length)];
+            function showImage(src) {
+                imgEl.src = src;
+                imgEl.onload = function () {
+                    imgEl.classList.add('is-loaded');
+                    imageWrapper.classList.add('loaded');
+                };
+                imgEl.onerror = function () {
+                    if (src !== 'aicenter.jpg') {
+                        showImage('aicenter.jpg');
+                    } else {
+                        imageWrapper.classList.add('loaded');
+                        imgEl.classList.add('is-loaded');
+                    }
+                };
+            }
+            showImage(selected);
+
+            // ---- Smooth transitions for all entry links ----
+            function bindLeave(el) {
+                if (!el) return;
+                el.addEventListener('click', function (e) {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                    e.preventDefault();
+                    try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (err) {}
+                    leaveAndNavigate(el.getAttribute('href') || 'quality.html');
+                });
+            }
+            bindLeave(document.getElementById('transition-link'));
+            bindLeave(document.getElementById('enterBtn'));
+
+            document.getElementById('skipOpeningBtn').addEventListener('click', function () {
+                try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
+                try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (e) {}
+                leaveAndNavigate('quality.html');
+            });
+
+            // ---- Canvas stars (perf) ----
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            let rafId = 0;
+            let running = true;
+
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                canvas.width = Math.floor(window.innerWidth * dpr);
+                canvas.height = Math.floor(window.innerHeight * dpr);
+                canvas.style.width = window.innerWidth + 'px';
+                canvas.style.height = window.innerHeight + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function createStars() {
+                const count = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 12000));
+                stars = [];
+                for (let i = 0; i < count; i++) {
+                    stars.push({
+                        x: Math.random() * window.innerWidth,
+                        y: Math.random() * window.innerHeight,
+                        r: Math.random() * 1.6 + 0.4,
+                        base: Math.random() * 0.5 + 0.35,
+                        phase: Math.random() * Math.PI * 2,
+                        speed: Math.random() * 0.02 + 0.008
+                    });
+                }
+            }
+
+            function drawStars(t) {
+                if (!running) return;
+                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+                    const a = s.base + Math.sin(t * s.speed + s.phase) * 0.35;
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(186, 230, 253,' + Math.max(0.15, a) + ')';
+                    ctx.shadowColor = 'rgba(103, 232, 249, 0.6)';
+                    ctx.shadowBlur = 6;
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+                if (!reducedMotion) {
+                    rafId = requestAnimationFrame(drawStars);
+                }
+            }
+
+            function startStars() {
+                resize();
+                createStars();
+                if (reducedMotion) {
+                    drawStars(0);
+                } else {
+                    rafId = requestAnimationFrame(drawStars);
+                }
+            }
+
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) {
+                    running = false;
+                    if (rafId) cancelAnimationFrame(rafId);
+                } else if (!reducedMotion) {
+                    running = true;
+                    rafId = requestAnimationFrame(drawStars);
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                resize();
+                createStars();
+            });
+
+            startStars();
+
+            // PWA
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('/sw.js').catch(function () {});
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
