@@ -1208,8 +1208,9 @@
             // Mark hub visit for opening journey
             try { localStorage.setItem('moip_visited_hub', '1'); } catch (e) {}
 
-            // 배지 정렬 우선순위: 운영 중 → 이벤트 → 베타 → 휴면/일시정지
-            const BADGE_ORDER = { live: 0, event: 1, beta: 2, paused: 3, new: 1 };
+            // 배지 정렬: 운영 중 → 베타 → 이벤트(컨테스트) → 휴면/일시정지
+            // (요청: 특실 검색 에이전트 다음에 컨테스트 배치)
+            const BADGE_ORDER = { live: 0, beta: 1, event: 2, new: 2, paused: 3 };
 
             const SERVICES = [
                 // ----- 운영 중 -----
@@ -1298,23 +1299,6 @@
                     audienceEn: 'R&D',
                     keywords: 'open model llm lulu owm weights'
                 },
-                {
-                    id: 'contest',
-                    category: 'lab',
-                    href: 'https://moip.ai.kr/contest/',
-                    img: 'contestlogo.jpg',
-                    badge: 'event',
-                    badgeKo: '이벤트',
-                    badgeEn: 'Event',
-                    titleKo: '심사품질연구회 AI 컨테스트',
-                    titleEn: 'AI Contest',
-                    enLabel: 'Contest Arena',
-                    descKo: '실험적 AI 프로토타입과 컨테스트 작품을 체험합니다.',
-                    descEn: 'Explore experimental AI prototypes and contest entries.',
-                    audienceKo: '연구·학습',
-                    audienceEn: 'Research & learning',
-                    keywords: 'contest ai 컨테스트 실험'
-                },
                 // ----- 베타 -----
                 {
                     id: 'search-agent',
@@ -1332,6 +1316,41 @@
                     audienceKo: '특허 실무',
                     audienceEn: 'Patent practice',
                     keywords: 'search agent prior art 특실 검색 선행기술 청구범위 patent'
+                },
+                {
+                    id: 'prompt-manager',
+                    category: 'diagnosis',
+                    href: 'https://pm.moip.ai.kr',
+                    img: 'pmlogo.jpg',
+                    badge: 'beta',
+                    badgeKo: '베타',
+                    badgeEn: 'Beta',
+                    titleKo: '특실심사-PromptManager',
+                    titleEn: 'Patent Exam Prompt Manager',
+                    enLabel: 'Prompt Manager',
+                    descKo: '특허·실용신안 심사에 쓰는 프롬프트를 저장·관리하는 서비스입니다.',
+                    descEn: 'Store and manage prompts used in patent & utility model examination.',
+                    audienceKo: '특허 실무',
+                    audienceEn: 'Patent practice',
+                    keywords: 'prompt manager pm 특실심사 프롬프트 특허 실용신안'
+                },
+                // ----- 이벤트 -----
+                {
+                    id: 'contest',
+                    category: 'lab',
+                    href: 'https://moip.ai.kr/contest/',
+                    img: 'contestlogo.jpg',
+                    badge: 'event',
+                    badgeKo: '이벤트',
+                    badgeEn: 'Event',
+                    titleKo: '심사품질연구회 AI 컨테스트',
+                    titleEn: 'AI Contest',
+                    enLabel: 'Idea Store',
+                    descKo: '심사·일상 아이디어 출품작 앱스토어. 브레인스토밍용 정적 프로토타입을 모았습니다.',
+                    descEn: 'App-store of exam & everyday idea prototypes for brainstorming.',
+                    audienceKo: '연구·학습',
+                    audienceEn: 'Research & learning',
+                    keywords: 'contest ai 컨테스트 실험 아이디어 앱스토어'
                 },
                 // ----- 휴면 / 일시정지 -----
                 {
