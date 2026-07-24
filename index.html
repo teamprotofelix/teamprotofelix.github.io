@@ -348,7 +348,7 @@
     </style>
 </head>
 <body>
-    <a class="skip-link" href="quality.html">서비스 허브로 바로 이동</a>
+    <a class="skip-link" href="https://eqai.moip.ai.kr/">서비스 허브로 바로 이동</a>
 
     <canvas id="stars-canvas" aria-hidden="true"></canvas>
 
@@ -372,13 +372,13 @@
         <div class="image-wrapper" id="imageWrapper">
             <div class="image-skeleton" aria-hidden="true"></div>
             <img id="randomImage" src="" alt="AI Futures 히어로 이미지" width="1600" height="1000">
-            <a href="quality.html" class="hover-area" id="transition-link" aria-label="서비스 허브로 입장 — Connect to Futures">
+            <a href="https://eqai.moip.ai.kr/" class="hover-area" id="transition-link" aria-label="서비스 허브로 입장 — Connect to Futures">
                 <span class="hover-text">Connect to Futures</span>
             </a>
         </div>
 
         <div class="actions">
-            <a href="quality.html" class="btn btn-primary" id="enterBtn">입장하기 · Connect</a>
+            <a href="https://eqai.moip.ai.kr/" class="btn btn-primary" id="enterBtn">입장하기 · Connect</a>
             <button type="button" class="btn btn-ghost" id="skipOpeningBtn" title="다음부터 오프닝을 건너뜁니다">다음부터 스킵</button>
         </div>
         <p class="hint" id="hintText">
@@ -407,7 +407,7 @@
                 if (markSkip) {
                     try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
                 }
-                leaveAndNavigate('quality.html');
+                leaveAndNavigate('https://eqai.moip.ai.kr/');
             }
 
             function leaveAndNavigate(href) {
@@ -484,7 +484,7 @@
                     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
                     e.preventDefault();
                     try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (err) {}
-                    leaveAndNavigate(el.getAttribute('href') || 'quality.html');
+                    leaveAndNavigate(el.getAttribute('href') || 'https://eqai.moip.ai.kr/');
                 });
             }
             bindLeave(document.getElementById('transition-link'));
@@ -493,7 +493,7 @@
             document.getElementById('skipOpeningBtn').addEventListener('click', function () {
                 try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
                 try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (e) {}
-                leaveAndNavigate('quality.html');
+                leaveAndNavigate('https://eqai.moip.ai.kr/');
             });
 
             // ---- Canvas stars (perf) ----
