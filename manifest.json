@@ -1,12 +1,12 @@
 {
-  "name": "Connect to Futures",
-  "short_name": "AI Futures",
-  "description": "미래를 연결하는 지능의 공간 - 우주적 AI 경험",
+  "name": "moip.ai.kr — AI Examination Quality Gateway",
+  "short_name": "moip.ai.kr",
+  "description": "지능형 심사품질 서비스로 연결되는 AI 게이트웨이. EQ AI 센터, PEQ Rule Engine, Marie AI Control Center 안내.",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#0a0a1f",
-  "background_color": "#05050f",
-  "orientation": "portrait",
+  "theme_color": "#0e2a52",
+  "background_color": "#ffffff",
+  "orientation": "any",
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -19,13 +19,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "1080x1920",
-      "type": "image/png"
     }
   ]
 }

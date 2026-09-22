@@ -1,585 +1,748 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>moip.ai.kr | Connect to Futures</title>
-    <meta name="description" content="심사품질 AI · 지식재산 심사 동반 공간. 특허·상표·디자인 심사품질을 위한 AI 허브로 연결합니다.">
-    <meta name="theme-color" content="#0a0a1f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>moip.ai.kr | AI Examination Quality Gateway</title>
+<meta content="지능형 심사품질 서비스로 연결되는 AI 게이트웨이. EQ AI 센터, PEQ Rule Engine, Marie AI Control Center를 한 곳에서 안내합니다." name="description"/>
+<meta content="#0e2a52" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<link href="manifest.json" rel="manifest"/>
+<link crossorigin="" href="https://cdn.jsdelivr.net" rel="preconnect"/>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet"/>
+<meta content="website" property="og:type"/>
+<meta content="moip.ai.kr | AI Examination Quality Gateway" property="og:title"/>
+<meta content="심사품질(EQ) AI 센터, PEQ Rule Engine, Marie AI Control Center로 연결되는 전문 서비스 관문" property="og:description"/>
+<meta content="https://moip.ai.kr/images/portal_hero.jpg" property="og:image"/>
+<meta content="https://moip.ai.kr/" property="og:url"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<style>
+    :root {
+      --navy-950: #081c38;
+      --navy-900: #0a2445;
+      --navy: #0e2a52;
+      --navy-700: #16406f;
+      --blue: #1b5aa5;
+      --blue-soft: #eaf1f9;
+      --text: #16253c;
+      --muted: #51617a;
+      --muted-2: #71809a;
+      --line: rgba(14, 42, 82, 0.12);
+      --line-soft: rgba(14, 42, 82, 0.08);
+      --bg: #ffffff;
+      --bg-alt: #f5f7fa;
+      --shadow: 0 1px 2px rgba(10, 36, 69, 0.05), 0 8px 24px rgba(10, 36, 69, 0.06);
+      --shadow-hover: 0 2px 4px rgba(10, 36, 69, 0.06), 0 16px 36px rgba(10, 36, 69, 0.10);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --max: 1180px;
+    }
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="moip.ai.kr | Connect to Futures">
-    <meta property="og:description" content="심사품질 AI · 지식재산 심사 동반 공간">
-    <meta property="og:image" content="https://moip.ai.kr/aicenter.jpg">
-    <meta property="og:url" content="https://moip.ai.kr/">
-    <meta name="twitter:card" content="summary_large_image">
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+        "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
+    }
 
-    <link rel="manifest" href="manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+    a { color: inherit; }
 
-    <style>
-        :root {
-            --bg-deep: #05050f;
-            --bg-mid: #0a0a1f;
-            --text: #e0f2fe;
-            --muted: #94a3b8;
-            --cyan: #67e8f9;
-            --violet: #c084fc;
-            --focus: #67e8f9;
-        }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      padding: 12px 16px;
+      background: var(--navy);
+      color: #fff;
+      z-index: 1000;
+      border-radius: 0 0 10px 0;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .skip-link:focus {
+      left: 0;
+      outline: 3px solid #7fb0e0;
+      outline-offset: 2px;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    .shell {
+      width: min(calc(100% - 48px), var(--max));
+      margin: 0 auto;
+    }
 
-        html { scroll-behavior: smooth; }
+    /* ===== 상단 유틸리티 바 ===== */
+    .govbar {
+      background: var(--navy-950);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+    }
+    .govbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 7px 0;
+    }
+    .govbar-inner .en { text-transform: uppercase; font-weight: 600; }
+    .govbar-inner .ko { color: rgba(255, 255, 255, 0.55); }
 
-        body {
-            font-family: 'Noto Sans KR', system-ui, sans-serif;
-            color: var(--text);
-            background: radial-gradient(ellipse at center, var(--bg-mid) 0%, var(--bg-deep) 100%);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            opacity: 0;
-            transition: opacity 0.7s ease;
-        }
+    /* ===== 헤더 ===== */
+    header.site-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
 
-        body.is-ready { opacity: 1; }
-        body.is-leaving { opacity: 0; pointer-events: none; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0;
+    }
 
-        #stars-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+    .brand-block { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--navy);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0;
+      flex: none;
+    }
+    .brand-text { display: flex; flex-direction: column; gap: 1px; }
+    .brand {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+    .brand-sub {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            z-index: 100;
-            padding: 0.75rem 1.25rem;
-            background: #0ea5e9;
-            color: #fff;
-            font-weight: 700;
-            border-radius: 0 0 8px 0;
-            text-decoration: none;
-        }
-        .skip-link:focus {
-            left: 0;
-            outline: 3px solid #fff;
-            outline-offset: 2px;
-        }
+    .topbar-note {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 500;
+      text-align: right;
+    }
+    .topbar-note strong { color: var(--navy); font-weight: 700; }
 
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 1100px;
-            width: 100%;
-            padding: 32px 20px 40px;
-            text-align: center;
-        }
+    /* ===== 히어로 ===== */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 56px;
+      align-items: center;
+      padding: 64px 0 72px;
+    }
 
-        .brand {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.75rem, 2vw, 0.9rem);
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: var(--cyan);
-            opacity: 0.85;
-            margin-bottom: 0.75rem;
-        }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      background: var(--blue);
+      flex: none;
+    }
 
-        .title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.6rem, 5vw, 2.6rem);
-            font-weight: 800;
-            background: linear-gradient(90deg, #67e8f9, #bae6fd, #c084fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.6rem;
-            line-height: 1.2;
-        }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4.4vw, 3.45rem);
+      line-height: 1.16;
+      letter-spacing: -0.03em;
+      color: var(--navy-900);
+      font-weight: 800;
+    }
 
-        .subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--muted);
-            margin-bottom: 0.35rem;
-            letter-spacing: 0.02em;
-            line-height: 1.55;
-        }
+    .hero-lead {
+      margin: 20px 0 0;
+      font-size: clamp(1rem, 1.7vw, 1.09rem);
+      color: var(--muted);
+      max-width: 56ch;
+    }
 
-        .tagline {
-            font-size: clamp(0.9rem, 2vw, 1.05rem);
-            color: #cbd5e1;
-            margin-bottom: 1.75rem;
-            opacity: 0.95;
-        }
-        .tagline strong {
-            color: var(--cyan);
-            font-weight: 700;
-        }
+    .hero-points {
+      margin: 30px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
 
-        .image-wrapper {
-            position: relative;
-            display: inline-block;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(103, 232, 249, 0.22);
-            max-width: min(920px, 100%);
-            width: 100%;
-            background: rgba(10, 10, 35, 0.6);
-            aspect-ratio: 16 / 10;
-        }
+    .hero-points li {
+      padding: 15px 18px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+    }
 
-        .image-wrapper img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transform: scale(1.03);
-            transition: opacity 0.8s ease, transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease;
-        }
+    .hero-points strong {
+      display: block;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
 
-        .image-wrapper img.is-loaded {
-            opacity: 1;
-            transform: scale(1);
-        }
+    .hero-points span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
 
-        .image-wrapper:hover img.is-loaded,
-        .image-wrapper:focus-within img.is-loaded {
-            transform: scale(1.05);
-            filter: brightness(1.08) saturate(1.12);
-        }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 34px;
+    }
 
-        .image-skeleton {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(110deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s infinite linear;
-            z-index: 0;
-        }
-        .image-wrapper.loaded .image-skeleton { display: none; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 13px 26px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 1px solid transparent;
+      transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible { outline: 3px solid #7fb0e0; outline-offset: 2px; }
+    .btn-primary {
+      color: #fff;
+      background: var(--navy);
+    }
+    .btn-primary:hover {
+      background: var(--navy-700);
+      box-shadow: 0 10px 24px rgba(14, 42, 82, 0.18);
+    }
+    .btn-primary .arrow { transition: transform .18s ease; }
+    .btn-primary:hover .arrow { transform: translateX(3px); }
 
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
+    .hero-note {
+      margin-top: 18px;
+      color: var(--muted-2);
+      font-size: 0.9rem;
+    }
 
-        .hover-area {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .hero-visual { margin: 0; }
 
-        .hover-area:focus-visible {
-            outline: 3px solid var(--focus);
-            outline-offset: -6px;
-            border-radius: 24px;
-        }
+    .hero-frame {
+      aspect-ratio: 16 / 10;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #eef2f7;
+    }
 
-        .hover-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.6rem, 6vw, 3.4rem);
-            font-weight: 800;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            background: linear-gradient(90deg, #67e8f9, #bae6fd, #c084fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
-            pointer-events: none;
-            padding: 0.5rem 1rem;
-            text-align: center;
-        }
+    .hero-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-        /* Desktop hover reveal */
-        @media (hover: hover) and (pointer: fine) {
-            .hover-area:hover .hover-text,
-            .hover-area:focus-visible .hover-text {
-                opacity: 1;
-                transform: scale(1);
-            }
-            .hover-area:hover::before,
-            .hover-area:focus-visible::before {
-                opacity: 1;
-            }
-        }
+    .hero-caption {
+      margin-top: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--line-soft);
+      border-left: 3px solid var(--navy);
+      border-radius: 8px;
+      background: var(--bg-alt);
+    }
 
-        .hover-area::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, rgba(5, 5, 20, 0.55) 0%, rgba(5, 5, 15, 0.75) 100%);
-            opacity: 0;
-            transition: opacity 0.35s ease;
-            pointer-events: none;
-        }
+    .hero-caption strong {
+      display: block;
+      font-size: 0.94rem;
+      color: var(--navy-900);
+      margin-bottom: 2px;
+    }
 
-        /* Touch: soft always-on hint */
-        @media (hover: none) {
-            .hover-area::before { opacity: 0.35; }
-            .hover-text {
-                opacity: 0.9;
-                transform: scale(1);
-                font-size: clamp(1.2rem, 5vw, 2rem);
-            }
-        }
+    .hero-caption span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
 
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.85rem;
-            justify-content: center;
-            margin-top: 1.75rem;
-        }
+    /* ===== 서비스 섹션 ===== */
+    .section {
+      padding: 68px 0 80px;
+      border-top: 1px solid var(--line-soft);
+      background: var(--bg-alt);
+    }
+    .section--services { background: var(--bg-alt); }
 
-        .btn {
-            font-family: 'Noto Sans KR', system-ui, sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            padding: 0.95rem 1.75rem;
-            border-radius: 999px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-            min-height: 48px;
-        }
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
 
-        .btn:focus-visible {
-            outline: 3px solid var(--focus);
-            outline-offset: 3px;
-        }
+    .section-kicker {
+      margin: 0 0 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
 
-        .btn-primary {
-            color: #0b1220;
-            background: linear-gradient(135deg, #67e8f9, #a78bfa);
-            box-shadow: 0 12px 36px rgba(103, 232, 249, 0.35);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 44px rgba(103, 232, 249, 0.5);
-        }
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--navy-900);
+    }
 
-        .btn-ghost {
-            color: var(--text);
-            background: rgba(15, 23, 42, 0.55);
-            border-color: rgba(103, 232, 249, 0.35);
-            backdrop-filter: blur(8px);
-        }
-        .btn-ghost:hover {
-            transform: translateY(-2px);
-            border-color: rgba(103, 232, 249, 0.75);
-            background: rgba(15, 23, 42, 0.8);
-        }
+    .section-head p {
+      margin: 10px 0 0;
+      max-width: 58ch;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
 
-        .hint {
-            margin-top: 1.1rem;
-            font-size: 0.92rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
+    .section-meta {
+      flex: none;
+      color: var(--muted-2);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: var(--bg);
+      white-space: nowrap;
+    }
 
-        .footer-note {
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
 
-        .return-banner {
-            display: none;
-            position: fixed;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            max-width: min(520px, calc(100% - 24px));
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid rgba(103, 232, 249, 0.35);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-            text-align: center;
-            font-size: 0.95rem;
-            color: #e2e8f0;
-        }
-        .return-banner.is-visible { display: block; }
-        .return-banner strong { color: var(--cyan); }
-        .return-banner .countdown { color: #fbbf24; font-weight: 700; }
+    .service-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            body { transition: none; }
-            .image-wrapper img { transition: opacity 0.2s ease; }
-        }
-    </style>
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(27, 90, 165, 0.35);
+    }
+
+    .card-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #eef2f7;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease;
+    }
+    .service-card:hover .card-media img { transform: scale(1.03); }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      color: var(--navy);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 24px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card-url {
+      color: var(--blue);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+      margin: 0 0 10px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.3rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--navy-900);
+      font-weight: 800;
+    }
+
+    .card-subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+      min-height: 3.2em;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 20px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line-soft);
+      display: grid;
+      gap: 10px;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .feature-list li {
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .feature-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      background: var(--blue);
+      transform: translateY(-50%);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+
+    .service-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted-2);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--navy);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      font-size: 0.94rem;
+      padding: 6px 0;
+      border-bottom: 1px solid transparent;
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .card-link::after { content: "→"; color: var(--blue); transition: transform .18s ease; }
+    .card-link:hover { color: var(--blue); border-color: var(--blue); }
+    .card-link:hover::after { transform: translateX(3px); }
+    .card-link:focus-visible { outline: 3px solid #7fb0e0; outline-offset: 3px; border-radius: 4px; }
+
+    /* ===== 푸터 ===== */
+    footer {
+      background: var(--navy-950);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 48px;
+      padding: 52px 0 36px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.02rem;
+      margin-bottom: 10px;
+    }
+    .footer-brand .brand-mark { width: 30px; height: 30px; border-radius: 7px; font-size: 0.82rem; background: rgba(255,255,255,0.14); }
+
+    .footer-desc {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 0.9rem;
+      max-width: 46ch;
+    }
+
+    .footer-nav-title {
+      margin: 0 0 12px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .footer-nav { display: grid; gap: 2px; }
+    .footer-nav a {
+      color: rgba(255, 255, 255, 0.78);
+      text-decoration: none;
+      font-size: 0.92rem;
+      padding: 5px 0;
+      transition: color .18s ease;
+    }
+    .footer-nav a:hover { color: #fff; }
+    .footer-nav a:focus-visible { outline: 2px solid #7fb0e0; outline-offset: 3px; border-radius: 4px; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 18px 0 22px;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; }
+      .service-grid { grid-template-columns: 1fr; }
+      .hero-points { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(calc(100% - 40px), var(--max)); }
+      .topbar { padding: 14px 0; }
+      .topbar-note { display: none; }
+      .hero { padding: 44px 0 56px; }
+      .section { padding: 52px 0 64px; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .card-body { padding: 20px 20px 18px; }
+      .card-footer { align-items: flex-start; flex-direction: column; }
+      h1 { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+      .govbar-inner .ko { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-    <a class="skip-link" href="https://eqai.moip.ai.kr/">서비스 허브로 바로 이동</a>
-
-    <canvas id="stars-canvas" aria-hidden="true"></canvas>
-
-    <div id="returnBanner" class="return-banner" role="status" aria-live="polite">
-        다시 오셨네요. <strong>서비스 허브</strong>로 <span class="countdown" id="countdown">3</span>초 후 이동합니다.
-        <div class="actions" style="margin-top: 0.65rem;">
-            <button type="button" class="btn btn-primary" id="goNowBtn" style="padding: 0.55rem 1.1rem; font-size: 0.9rem;">지금 이동</button>
-            <button type="button" class="btn btn-ghost" id="stayBtn" style="padding: 0.55rem 1.1rem; font-size: 0.9rem;">오프닝 보기</button>
-        </div>
-    </div>
-
-    <main class="container" id="main">
-        <p class="brand">moip.ai.kr</p>
-        <h1 class="title">Connect to Futures</h1>
-        <p class="subtitle">미래를 연결하는 지능의 공간</p>
-        <p class="tagline">
-            <strong>심사품질 AI</strong> · 지식재산 심사 동반 공간<br>
-            특허·상표·디자인 심사품질의 객관성·정확성·일관성을 지원합니다.
+<a class="skip-link" href="#services">서비스 바로가기</a>
+<div class="govbar">
+<div class="shell govbar-inner">
+<span class="en">AI Examination Quality Gateway</span>
+<span class="ko">지능형 심사품질 서비스 포털</span>
+</div>
+</div>
+<header class="site-header">
+<div class="shell topbar">
+<div class="brand-block">
+<span aria-hidden="true" class="brand-mark">M</span>
+<div class="brand-text">
+<div class="brand">moip.ai.kr</div>
+<div class="brand-sub">AI Examination Quality Gateway</div>
+</div>
+</div>
+<p class="topbar-note"><strong>전문 심사품질 서비스</strong> · 연구형 지식 엔진 · 운영형 AI 컨트롤 환경</p>
+</div>
+</header>
+<main id="main">
+<section aria-labelledby="page-title" class="hero shell">
+<div class="hero-copy">
+<p class="eyebrow">Integrated Access Point</p>
+<h1 id="page-title">지능형 심사품질 서비스를 연결하는<br/>전문 관문</h1>
+<p class="hero-lead">
+          moip.ai.kr은 심사품질 관련 지능형 서비스로 연결되는 진입 페이지입니다.
+          심사품질(EQ) AI 센터, PEQ Rule Engine, Marie AI Control Center를
+          하나의 전문 포털 구조로 안내합니다.
         </p>
-
-        <div class="image-wrapper" id="imageWrapper">
-            <div class="image-skeleton" aria-hidden="true"></div>
-            <img id="randomImage" src="" alt="AI Futures 히어로 이미지" width="1600" height="1000">
-            <a href="https://eqai.moip.ai.kr/" class="hover-area" id="transition-link" aria-label="서비스 허브로 입장 — Connect to Futures">
-                <span class="hover-text">Connect to Futures</span>
-            </a>
-        </div>
-
-        <div class="actions">
-            <a href="https://eqai.moip.ai.kr/" class="btn btn-primary" id="enterBtn">입장하기 · Connect</a>
-            <button type="button" class="btn btn-ghost" id="skipOpeningBtn" title="다음부터 오프닝을 건너뜁니다">다음부터 스킵</button>
-        </div>
-        <p class="hint" id="hintText">
-            이미지 또는 버튼을 눌러 심사품질 AI 허브로 이동합니다.<br>
-            재방문 시 오프닝을 건너뛰려면 「다음부터 스킵」을 선택하세요.
-        </p>
-        <p class="footer-note">이곳은 별들이 기다리는 장소입니다.</p>
-    </main>
-
-    <script>
-        (function () {
-            const STORAGE_SKIP = 'moip_skip_opening';
-            const STORAGE_VISITED = 'moip_visited_hub';
-            const images = ['aicenter.jpg', 'futures01.jpg', 'futures02.jpg'];
-            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            const body = document.body;
-            const imgEl = document.getElementById('randomImage');
-            const imageWrapper = document.getElementById('imageWrapper');
-            const returnBanner = document.getElementById('returnBanner');
-            const countdownEl = document.getElementById('countdown');
-            let autoTimer = null;
-            let countdownTimer = null;
-
-            function goToHub(markSkip) {
-                if (markSkip) {
-                    try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
-                }
-                leaveAndNavigate('https://eqai.moip.ai.kr/');
-            }
-
-            function leaveAndNavigate(href) {
-                if (autoTimer) clearTimeout(autoTimer);
-                if (countdownTimer) clearInterval(countdownTimer);
-                body.classList.add('is-leaving');
-                const delay = reducedMotion ? 0 : 600;
-                setTimeout(function () {
-                    window.location.href = href;
-                }, delay);
-            }
-
-            // ---- Return-visit auto redirect ----
-            let skipOpening = false;
-            try {
-                skipOpening = localStorage.getItem(STORAGE_SKIP) === '1';
-            } catch (e) {}
-
-            const params = new URLSearchParams(window.location.search);
-            const forceOpening = params.get('opening') === '1' || params.get('show') === 'opening';
-
-            if (skipOpening && !forceOpening) {
-                // Immediate soft redirect with cancel option
-                returnBanner.classList.add('is-visible');
-                let left = 3;
-                countdownEl.textContent = String(left);
-                countdownTimer = setInterval(function () {
-                    left -= 1;
-                    countdownEl.textContent = String(left);
-                    if (left <= 0) {
-                        clearInterval(countdownTimer);
-                        goToHub(false);
-                    }
-                }, 1000);
-                autoTimer = setTimeout(function () { goToHub(false); }, 3000);
-
-                document.getElementById('goNowBtn').addEventListener('click', function () {
-                    goToHub(false);
-                });
-                document.getElementById('stayBtn').addEventListener('click', function () {
-                    if (autoTimer) clearTimeout(autoTimer);
-                    if (countdownTimer) clearInterval(countdownTimer);
-                    returnBanner.classList.remove('is-visible');
-                    try { localStorage.removeItem(STORAGE_SKIP); } catch (e) {}
-                    body.classList.add('is-ready');
-                });
-            } else {
-                body.classList.add('is-ready');
-            }
-
-            // ---- Image preload ----
-            const selected = images[Math.floor(Math.random() * images.length)];
-            function showImage(src) {
-                imgEl.src = src;
-                imgEl.onload = function () {
-                    imgEl.classList.add('is-loaded');
-                    imageWrapper.classList.add('loaded');
-                };
-                imgEl.onerror = function () {
-                    if (src !== 'aicenter.jpg') {
-                        showImage('aicenter.jpg');
-                    } else {
-                        imageWrapper.classList.add('loaded');
-                        imgEl.classList.add('is-loaded');
-                    }
-                };
-            }
-            showImage(selected);
-
-            // ---- Smooth transitions for all entry links ----
-            function bindLeave(el) {
-                if (!el) return;
-                el.addEventListener('click', function (e) {
-                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-                    e.preventDefault();
-                    try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (err) {}
-                    leaveAndNavigate(el.getAttribute('href') || 'https://eqai.moip.ai.kr/');
-                });
-            }
-            bindLeave(document.getElementById('transition-link'));
-            bindLeave(document.getElementById('enterBtn'));
-
-            document.getElementById('skipOpeningBtn').addEventListener('click', function () {
-                try { localStorage.setItem(STORAGE_SKIP, '1'); } catch (e) {}
-                try { localStorage.setItem(STORAGE_VISITED, '1'); } catch (e) {}
-                leaveAndNavigate('https://eqai.moip.ai.kr/');
-            });
-
-            // ---- Canvas stars (perf) ----
-            const canvas = document.getElementById('stars-canvas');
-            const ctx = canvas.getContext('2d');
-            let stars = [];
-            let rafId = 0;
-            let running = true;
-
-            function resize() {
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-                canvas.width = Math.floor(window.innerWidth * dpr);
-                canvas.height = Math.floor(window.innerHeight * dpr);
-                canvas.style.width = window.innerWidth + 'px';
-                canvas.style.height = window.innerHeight + 'px';
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            }
-
-            function createStars() {
-                const count = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 12000));
-                stars = [];
-                for (let i = 0; i < count; i++) {
-                    stars.push({
-                        x: Math.random() * window.innerWidth,
-                        y: Math.random() * window.innerHeight,
-                        r: Math.random() * 1.6 + 0.4,
-                        base: Math.random() * 0.5 + 0.35,
-                        phase: Math.random() * Math.PI * 2,
-                        speed: Math.random() * 0.02 + 0.008
-                    });
-                }
-            }
-
-            function drawStars(t) {
-                if (!running) return;
-                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-                for (let i = 0; i < stars.length; i++) {
-                    const s = stars[i];
-                    const a = s.base + Math.sin(t * s.speed + s.phase) * 0.35;
-                    ctx.beginPath();
-                    ctx.fillStyle = 'rgba(186, 230, 253,' + Math.max(0.15, a) + ')';
-                    ctx.shadowColor = 'rgba(103, 232, 249, 0.6)';
-                    ctx.shadowBlur = 6;
-                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.shadowBlur = 0;
-                if (!reducedMotion) {
-                    rafId = requestAnimationFrame(drawStars);
-                }
-            }
-
-            function startStars() {
-                resize();
-                createStars();
-                if (reducedMotion) {
-                    drawStars(0);
-                } else {
-                    rafId = requestAnimationFrame(drawStars);
-                }
-            }
-
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden) {
-                    running = false;
-                    if (rafId) cancelAnimationFrame(rafId);
-                } else if (!reducedMotion) {
-                    running = true;
-                    rafId = requestAnimationFrame(drawStars);
-                }
-            });
-
-            window.addEventListener('resize', function () {
-                resize();
-                createStars();
-            });
-
-            startStars();
-
-            // PWA
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/sw.js').catch(function () {});
-                });
-            }
-        })();
-    </script>
+<ul aria-label="핵심 안내" class="hero-points">
+<li><strong>EQ AI 센터</strong><span>심사품질 중심 허브와 서비스 안내</span></li>
+<li><strong>PEQ Rule Engine</strong><span>Rule 기반 심사품질 진단 지식 엔진</span></li>
+<li><strong>Marie AI Control Center</strong><span>실제 운영형 심사품질 관리 환경</span></li>
+<li><strong>Professional Gateway</strong><span>명확하고 신뢰감 있는 서비스 동선 제공</span></li>
+</ul>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#services">서비스 바로가기<span aria-hidden="true" class="arrow">→</span></a>
+</div>
+<p class="hero-note">아래 3개 서비스 중 목적에 맞는 환경을 선택해 이동할 수 있습니다.</p>
+</div>
+<figure class="hero-visual">
+<div class="hero-frame">
+<img alt="AI 기반 심사품질 서비스 게이트웨이를 상징하는 전문 아키텍처 이미지" loading="eager" src="images/portal_hero.jpg"/>
+</div>
+<figcaption class="hero-caption">
+<strong>EQ AI Center · PEQ Rule Engine · Marie AI Control Center</strong>
+<span>안내 · 연구 · 운영이 분리된 3중 서비스 구조</span>
+</figcaption>
+</figure>
+</section>
+<section aria-labelledby="services-title" class="section" id="services">
+<div class="shell">
+<div class="section-head">
+<div>
+<p class="section-kicker">Service Directory</p>
+<h2 id="services-title">서비스 바로가기</h2>
+<p>각 서비스는 역할이 다릅니다. 안내 중심 허브, Rule Engine 소개/시연 사이트, 실제 운영형 관리 환경을 구분하여 접근할 수 있도록 구성합니다.</p>
+</div>
+<span class="section-meta">총 3개 서비스</span>
+</div>
+<div class="service-grid">
+<article class="service-card">
+<div class="card-media">
+<img alt="심사품질 AI 센터를 상징하는 서비스 이미지" loading="lazy" src="images/eqai_card.jpg"/>
+<span class="card-badge">Hub</span>
+</div>
+<div class="card-body">
+<p class="card-url">eqai.moip.ai.kr</p>
+<h3 class="card-title">심사품질(EQ) AI 센터</h3>
+<p class="card-subtitle">심사품질 관련 AI 서비스의 중심 허브와 안내 공간입니다.</p>
+<ul class="feature-list">
+<li>심사품질 관련 서비스 진입 허브</li>
+<li>안내 중심의 구조와 서비스 연결</li>
+<li>심사품질 관련 정보와 접근 동선 제공</li>
+</ul>
+<div class="card-footer">
+<span class="service-tag">EQ AI Hub</span>
+<a class="card-link" href="https://eqai.moip.ai.kr/">바로 이동</a>
+</div>
+</div>
+</article>
+<article class="service-card">
+<div class="card-media">
+<img alt="PEQ Rule Engine 사이트를 상징하는 학회형 이미지" loading="lazy" src="images/peqrule_card.jpg"/>
+<span class="card-badge">Research</span>
+</div>
+<div class="card-body">
+<p class="card-url">peqrule.moip.ai.kr</p>
+<h3 class="card-title">PEQ Rule Engine</h3>
+<p class="card-subtitle">심사품질 진단 Rule Engine의 개념, 구조, 시연 페이지를 제공하는 전문 소개 사이트입니다.</p>
+<ul class="feature-list">
+<li>Rule Engine 소개 및 아키텍처 설명</li>
+<li>Fact · Rule · Evidence 흐름 시현</li>
+<li>심사품질 진단 지식 엔진의 작동 원리 체험</li>
+</ul>
+<div class="card-footer">
+<span class="service-tag">Research &amp; Showcase</span>
+<a class="card-link" href="https://peqrule.moip.ai.kr/">바로 이동</a>
+</div>
+</div>
+</article>
+<article class="service-card">
+<div class="card-media">
+<img alt="Marie AI Control Center 운영 환경을 상징하는 전문 이미지" loading="lazy" src="images/agent_card.jpg"/>
+<span class="card-badge">Operations</span>
+</div>
+<div class="card-body">
+<p class="card-url">agent.moip.ai.kr</p>
+<h3 class="card-title">Marie AI Control Center</h3>
+<p class="card-subtitle">PEQ Rule Engine과 KIPRIS PLUS 연계를 바탕으로 실제 심사품질 관리를 수행하는 운영형 AI 환경입니다.</p>
+<ul class="feature-list">
+<li>실제 심사품질 진단 및 관리 작업 연결</li>
+<li>PEQ Rule Engine 기반 심사품질 진단 흐름</li>
+<li>KIPRIS PLUS 및 운영형 도구 연계</li>
+</ul>
+<div class="card-footer">
+<span class="service-tag">Operational AI Control</span>
+<a class="card-link" href="https://agent.moip.ai.kr/">바로 이동</a>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="shell">
+<div class="footer-grid">
+<div>
+<div class="footer-brand"><span aria-hidden="true" class="brand-mark">M</span>moip.ai.kr</div>
+<p class="footer-desc">AI Examination Quality Gateway — 심사품질 안내 · Rule Engine 시현 · 운영형 AI Control Environment를 한 곳에서 안내하는 전문 서비스 관문입니다.</p>
+</div>
+<nav aria-label="주요 서비스">
+<p class="footer-nav-title">주요 서비스</p>
+<div class="footer-nav">
+<a href="https://eqai.moip.ai.kr/">심사품질(EQ) AI 센터 — eqai.moip.ai.kr</a>
+<a href="https://peqrule.moip.ai.kr/">PEQ Rule Engine — peqrule.moip.ai.kr</a>
+<a href="https://agent.moip.ai.kr/">Marie AI Control Center — agent.moip.ai.kr</a>
+</div>
+</nav>
+</div>
+<div class="footer-bottom">© 2026 moip.ai.kr · AI Examination Quality Gateway</div>
+</div>
+</footer>
+<script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/sw.js").catch(function (error) {
+          console.warn("Service Worker registration failed:", error);
+        });
+      });
+    }
+  </script>
 </body>
 </html>

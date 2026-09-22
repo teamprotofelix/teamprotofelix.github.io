@@ -1,11 +1,13 @@
-const CACHE_NAME = 'ai-futures-v1';
+const CACHE_NAME = 'moip-gateway-v1';
 const urlsToCache = [
   '/',
   '/index.html',
   '/quality.html',
-  '/aicenter.jpg',
-  '/futures01.jpg',
-  // 아이콘도 캐시 (선택)
+  '/404.html',
+  '/images/portal_hero.jpg',
+  '/images/eqai_card.jpg',
+  '/images/peqrule_card.jpg',
+  '/images/agent_card.jpg',
   '/icons/icon-192.png',
   '/icons/icon-512.png'
 ];
