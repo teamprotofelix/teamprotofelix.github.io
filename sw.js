@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moip-gateway-v1';
+const CACHE_NAME = 'moip-gateway-v2';
 const urlsToCache = [
   '/',
   '/index.html',
