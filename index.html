@@ -504,123 +504,101 @@
     /* ===== CAIPEX 지원 연구 섹션 ===== */
     .section--research { background: var(--bg); }
 
-    .research-panel {
+    .research-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 48px;
-      align-items: center;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .research-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
       background: var(--bg-alt);
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      padding: 44px 48px;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     }
 
-    .research-title {
+    .research-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(27, 90, 165, 0.35);
+    }
+
+    .research-card-body {
+      padding: 26px 26px 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .research-field {
+      margin: 0 0 12px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .research-card-title {
       margin: 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.15rem);
-      line-height: 1.2;
-      letter-spacing: -0.02em;
+      font-size: 1.28rem;
+      line-height: 1.28;
+      letter-spacing: -0.01em;
       color: var(--navy-900);
       font-weight: 800;
     }
 
-    .research-desc {
-      margin: 14px 0 0;
-      max-width: 58ch;
-      color: var(--muted);
-      font-size: 0.98rem;
+    /* 카드 전체를 덮는 확장 링크 (제목이 앵커) */
+    .research-stretched {
+      color: inherit;
+      text-decoration: none;
     }
-
-    .research-link-note {
-      margin: 14px 0 0;
-      padding: 12px 16px;
-      border-left: 3px solid var(--navy);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--muted);
-      font-size: 0.9rem;
-      max-width: 62ch;
-    }
-
-    .research-cta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 16px;
-      margin-top: 26px;
-    }
-
-    .research-note {
-      margin: 14px 0 0;
-      color: var(--muted-2);
-      font-size: 0.85rem;
-    }
-
-    .flow-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      column-gap: 32px;
-    }
-
-    .flow-step {
-      position: relative;
-      padding-top: 34px;
-    }
-
-    /* 이전 단계 점에서 이 단계 점까지 이어지는 근거 연결선 */
-    .flow-step + .flow-step::before {
+    .research-stretched::after {
       content: "";
       position: absolute;
-      top: 7px;
-      left: calc(-100% - 32px);
-      right: 100%;
-      height: 2px;
-      background: var(--line);
+      inset: 0;
     }
-
-    .flow-dot {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 16px;
-      height: 16px;
+    .research-stretched:hover { color: var(--blue); }
+    .research-stretched:focus-visible {
+      outline: 3px solid #7fb0e0;
+      outline-offset: 3px;
       border-radius: 4px;
-      background: var(--blue-soft);
-      border: 2px solid var(--blue);
-      z-index: 1;
-    }
-    .flow-step--unknown .flow-dot {
-      background: var(--bg);
-      border-style: dashed;
-      border-color: var(--muted-2);
     }
 
-    .flow-num {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--muted-2);
-      margin-bottom: 4px;
-    }
-
-    .flow-step strong {
-      display: block;
-      font-size: 0.98rem;
-      font-weight: 800;
-      color: var(--navy);
-    }
-
-    .flow-cap {
-      display: block;
-      margin-top: 4px;
+    .research-card-desc {
+      margin: 12px 0 0;
       color: var(--muted);
-      font-size: 0.85rem;
+      font-size: 0.94rem;
     }
+
+    .research-tags {
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .research-tags li {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--navy);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .research-card-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding: 22px 26px 26px;
+    }
+    .research-card .btn { width: 100%; }
 
     .hero-sub-link {
       display: inline-flex;
@@ -718,7 +696,7 @@
       .hero { grid-template-columns: 1fr; gap: 32px; }
       .service-grid { grid-template-columns: 1fr; }
       .hero-points { grid-template-columns: 1fr; }
-      .research-panel { grid-template-columns: 1fr; gap: 32px; }
+      .research-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     }
 
@@ -731,18 +709,9 @@
       .section-head { flex-direction: column; align-items: flex-start; }
       .card-body { padding: 20px 20px 18px; }
       .card-footer { align-items: flex-start; flex-direction: column; }
-      .research-panel { padding: 32px 24px; }
-      .flow-list { grid-template-columns: 1fr; row-gap: 24px; }
-      .flow-step { padding: 0 0 0 32px; }
-      .flow-dot { top: 2px; }
-      .flow-step + .flow-step::before {
-        left: 7px;
-        right: auto;
-        width: 2px;
-        height: calc(100% + 24px);
-        top: calc(-100% - 14px);
-        bottom: auto;
-      }
+      .research-grid { grid-template-columns: 1fr; }
+      .research-card-body { padding: 22px 22px 0; }
+      .research-card-footer { padding: 20px 22px 22px; }
       .footer-navs { grid-template-columns: 1fr; }
       h1 { font-size: clamp(1.9rem, 9vw, 2.6rem); }
       .govbar-inner .ko { display: none; }
@@ -886,51 +855,72 @@
 </section>
 <section aria-labelledby="research-title" class="section section--research" id="research">
 <div class="shell">
-<div class="research-panel">
+<div class="section-head">
 <div>
 <p class="section-kicker">CAIPEX 지원 연구 · Interactive Research</p>
-<h2 class="research-title" id="research-title">근거를 따라가는 심사품질의 미래</h2>
-<p class="research-desc">
-            AI가 사건 자료의 근거를 정리하고, 명시적 규칙이 진단 후보를 제시합니다.
-            자료가 부족하면 UNKNOWN으로 남기고, 최종 판단은 사람이 내립니다.
-            CAIPEX 학회의 지원을 받는 연구 사이트에서 이 흐름을 가상 사건으로 체험해 보세요.
-          </p>
-<p class="research-link-note">
-            PEQ Rule Engine이 개별 규칙 엔진의 개념과 시연을 보여 준다면,
-            이 연구는 근거의 연결, 불확실성의 처리, 사람의 최종 판단까지
-            심사품질의 미래를 연구 관점에서 미리 체험하게 합니다.
-          </p>
-<div class="research-cta">
-<a class="btn btn-primary" href="https://research.caipex.site/" rel="noopener noreferrer" target="_blank">연구 사이트 체험하기<span aria-hidden="true" class="arrow">→</span><span class="sr-only">(새 탭에서 열림)</span></a>
+<h2 id="research-title">심사품질의 미래를 연구하고 체험하다</h2>
+<p>근거 중심의 품질 진단, 마쿠쉬 화학 청구항의 분석, 한국·일본 심사자료의 비교를 각각의 연구 사례로 살펴보세요. 세 사이트는 CAIPEX 학회의 지원을 받는 연구 체험 공간입니다.</p>
 </div>
-<p class="research-note">연구용 가상 사례를 사용하는 체험입니다.</p>
+<span class="section-meta">총 3개 연구</span>
 </div>
-<ol aria-label="연구 체험 흐름" class="flow-list">
-<li class="flow-step">
-<span aria-hidden="true" class="flow-dot"></span>
-<span aria-hidden="true" class="flow-num">01</span>
-<strong>근거 확인</strong>
-<span class="flow-cap">자료의 근거를 정리·연결</span>
-</li>
-<li class="flow-step">
-<span aria-hidden="true" class="flow-dot"></span>
-<span aria-hidden="true" class="flow-num">02</span>
-<strong>규칙 평가</strong>
-<span class="flow-cap">명시적 규칙이 진단 후보 제시</span>
-</li>
-<li class="flow-step flow-step--unknown">
-<span aria-hidden="true" class="flow-dot"></span>
-<span aria-hidden="true" class="flow-num">03</span>
-<strong>UNKNOWN</strong>
-<span class="flow-cap">자료가 부족하면 유보로 표시</span>
-</li>
-<li class="flow-step">
-<span aria-hidden="true" class="flow-dot"></span>
-<span aria-hidden="true" class="flow-num">04</span>
-<strong>사람의 검토</strong>
-<span class="flow-cap">사람이 최종 판단하고 개선</span>
-</li>
-</ol>
+<div class="research-grid">
+<article class="research-card">
+<div class="research-card-body">
+<p class="research-field">01 · 심사품질 진단</p>
+<h3 class="research-card-title"><a class="research-stretched" href="https://research.caipex.site/" rel="noopener noreferrer" target="_blank">근거를 따라가는 심사품질의 미래<span class="sr-only">(새 탭에서 열림)</span></a></h3>
+<p class="research-card-desc">
+              사건 자료의 출처를 확인하고, 명시적 규칙으로 진단 후보를 살펴봅니다.
+              자료가 부족하면 UNKNOWN으로 남기고, 사람이 근거를 검토해 판단하는 흐름을
+              가상 사건으로 체험합니다.
+            </p>
+<ul class="research-tags">
+<li>근거 연결</li>
+<li>규칙 평가</li>
+<li>사람의 검토</li>
+</ul>
+</div>
+<div class="research-card-footer">
+<a class="btn btn-primary" href="https://research.caipex.site/" rel="noopener noreferrer" target="_blank">심사품질 연구 체험하기<span aria-hidden="true" class="arrow">→</span><span class="sr-only">(새 탭에서 열림)</span></a>
+</div>
+</article>
+<article class="research-card">
+<div class="research-card-body">
+<p class="research-field">02 · 화학 청구항</p>
+<h3 class="research-card-title"><a class="research-stretched" href="https://markush.caipex.site/" rel="noopener noreferrer" target="_blank">마쿠쉬 화학 청구항 심사 연구<span class="sr-only">(새 탭에서 열림)</span></a></h3>
+<p class="research-card-desc">
+              일반식의 골격과 R 치환기·제외 조건을 바꾸며 청구범위가 어떻게 달라지는지
+              확인합니다. 검색 결과와 문헌별 근거를 살펴보고 신규성·진보성의 검토 경계를
+              체험합니다.
+            </p>
+<ul class="research-tags">
+<li>청구범위 해독</li>
+<li>문헌별 증거</li>
+<li>심사관 검토</li>
+</ul>
+</div>
+<div class="research-card-footer">
+<a class="btn btn-primary" href="https://markush.caipex.site/" rel="noopener noreferrer" target="_blank">마쿠쉬 연구 체험하기<span aria-hidden="true" class="arrow">→</span><span class="sr-only">(새 탭에서 열림)</span></a>
+</div>
+</article>
+<article class="research-card">
+<div class="research-card-body">
+<p class="research-field">03 · 국제 심사 비교</p>
+<h3 class="research-card-title"><a class="research-stretched" href="https://moipharmony.caipex.site/" rel="noopener noreferrer" target="_blank">한·일 심사품질 조율 연구<span class="sr-only">(새 탭에서 열림)</span></a></h3>
+<p class="research-card-desc">
+              같은 특허패밀리의 한국·일본 청구항 버전, 선행문헌, 원문 근거와 적용 기준을
+              대조합니다. 결과가 다른 이유를 확인하고 정당한 차이·재검토 후보·판단 유보를
+              구별하는 가상 사례를 체험합니다.
+            </p>
+<ul class="research-tags">
+<li>청구항 버전 비교</li>
+<li>증거 대조</li>
+<li>사람의 재검토</li>
+</ul>
+</div>
+<div class="research-card-footer">
+<a class="btn btn-primary" href="https://moipharmony.caipex.site/" rel="noopener noreferrer" target="_blank">한·일 비교 연구 체험하기<span aria-hidden="true" class="arrow">→</span><span class="sr-only">(새 탭에서 열림)</span></a>
+</div>
+</article>
 </div>
 </div>
 </section>
@@ -954,7 +944,9 @@
 <nav aria-label="관련 연구">
 <p class="footer-nav-title">관련 연구</p>
 <div class="footer-nav">
-<a href="https://research.caipex.site/" rel="noopener noreferrer" target="_blank">CAIPEX 지원 심사품질 연구 — research.caipex.site<span class="sr-only">(새 탭에서 열림)</span></a>
+<a href="https://research.caipex.site/" rel="noopener noreferrer" target="_blank">심사품질 진단 고도화 연구 — research.caipex.site<span class="sr-only">(새 탭에서 열림)</span></a>
+<a href="https://markush.caipex.site/" rel="noopener noreferrer" target="_blank">마쿠쉬 화학 청구항 심사 연구 — markush.caipex.site<span class="sr-only">(새 탭에서 열림)</span></a>
+<a href="https://moipharmony.caipex.site/" rel="noopener noreferrer" target="_blank">한·일 심사품질 조율 연구 — moipharmony.caipex.site<span class="sr-only">(새 탭에서 열림)</span></a>
 </div>
 </nav>
 </div>
