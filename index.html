@@ -250,35 +250,6 @@
       max-width: 56ch;
     }
 
-    .hero-points {
-      margin: 30px 0 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .hero-points li {
-      padding: 15px 18px;
-      border: 1px solid var(--line-soft);
-      border-radius: var(--radius-md);
-      background: var(--bg);
-    }
-
-    .hero-points strong {
-      display: block;
-      color: var(--navy);
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 2px;
-    }
-
-    .hero-points span {
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
     .hero-cta {
       display: flex;
       flex-wrap: wrap;
@@ -754,7 +725,6 @@
     @media (max-width: 1080px) {
       .hero { grid-template-columns: 1fr; gap: 32px; }
       .service-grid { grid-template-columns: 1fr; }
-      .hero-points { grid-template-columns: 1fr; }
       .research-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     }
@@ -818,12 +788,6 @@
           심사품질(EQ) AI 센터, PEQ Rule Engine, Marie AI Control Center를
           하나의 전문 포털 구조로 안내합니다.
         </p>
-<ul aria-label="핵심 안내" class="hero-points">
-<li><strong>EQ AI 센터</strong><span>심사품질 중심 허브와 서비스 안내</span></li>
-<li><strong>PEQ Rule Engine</strong><span>Rule 기반 심사품질 진단 지식 엔진</span></li>
-<li><strong>Marie AI Control Center</strong><span>실제 운영형 심사품질 관리 환경</span></li>
-<li><strong>Professional Gateway</strong><span>명확하고 신뢰감 있는 서비스 동선 제공</span></li>
-</ul>
 <div class="hero-cta">
 <a class="btn btn-primary" href="#services">서비스 바로가기<span aria-hidden="true" class="arrow">→</span></a>
 <a class="hero-sub-link" href="#research">CAIPEX 지원 연구 소개<span aria-hidden="true">↓</span></a>
