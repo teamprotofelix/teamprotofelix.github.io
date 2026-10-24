@@ -78,6 +78,63 @@
       margin: 0 auto;
     }
 
+
+    /* ===== AI 심사품질 진단 도입 안내 ===== */
+    .adoption { padding-top: 32px; }
+    .adoption-card {
+      padding: clamp(22px, 3vw, 36px);
+      border: 1px solid #c5d7eb;
+      border-top: 4px solid var(--blue);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(120deg, #f0f6fd, #fff);
+      box-shadow: var(--shadow);
+    }
+    .adoption-badge {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .adoption-card h2 {
+      margin: 12px 0 10px;
+      color: var(--navy-900);
+      font-size: clamp(1.45rem, 3vw, 1.9rem);
+      line-height: 1.3;
+    }
+    .adoption-lead { margin: 0; max-width: 76ch; color: var(--muted); }
+    .adoption-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .adoption-link {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+      text-decoration: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .adoption-link:hover { border-color: var(--blue); box-shadow: var(--shadow); }
+    .adoption-link:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .adoption-link strong { color: var(--navy); font-size: 1.06rem; }
+    .adoption-link-desc { color: var(--muted); font-size: 0.92rem; }
+    .adoption-link-url { color: var(--blue); font-size: 0.8rem; overflow-wrap: anywhere; }
+    .adoption-link-action { margin-top: auto; padding-top: 4px; color: var(--navy); font-weight: 700; font-size: 0.92rem; }
+    .adoption-note { margin: 16px 0 0; color: var(--muted); font-size: 0.85rem; }
+    @media (max-width: 720px) {
+      .adoption { padding-top: 24px; }
+      .adoption-links { grid-template-columns: 1fr; }
+    }
+
     /* ===== 상단 유틸리티 바 ===== */
     .govbar {
       background: var(--navy-950);
@@ -748,6 +805,32 @@
 </div>
 </header>
 <main id="main">
+
+<section aria-labelledby="adoption-title" class="adoption shell" id="adoption">
+<article class="adoption-card">
+<span class="adoption-badge">도입 계획</span>
+<h2 id="adoption-title">AI를 활용한 심사품질 진단 업무</h2>
+<p class="adoption-lead">Agentic AI 기반 진단 스킬을 활용하여 심사서류를 대조하고 진단 후보와 근거를 제시하는 업무 도입을 준비하고 있습니다. AI의 진단 결과는 심사품질관이 검토하여 최종 확정합니다.</p>
+<div class="adoption-links">
+<a class="adoption-link" href="https://skill.inwardis.chatgpt.site/" rel="noopener noreferrer" target="_blank">
+<strong>스킬 안내 · 다운로드</strong>
+<span class="adoption-link-desc">스킬의 기능과 설치·사용 방법을 확인하고, 배포용 설치 파일을 내려받는 안내 사이트입니다.</span>
+<span class="adoption-link-url">skill.inwardis.chatgpt.site</span>
+<span class="adoption-link-action">사용 안내와 설치 파일 보기 <span aria-hidden="true">→</span></span>
+<span class="sr-only">(새 탭에서 열림)</span>
+</a>
+<a class="adoption-link" href="https://github.com/teamprotofelix/EQAi_Skills" rel="noopener noreferrer" target="_blank">
+<strong>최신 스킬 · 개선 참여</strong>
+<span class="adoption-link-desc">최신 스킬 소스와 변경 이력을 확인하고, PR(변경 제안)을 제출·검토하는 GitHub 저장소입니다.</span>
+<span class="adoption-link-url">github.com/teamprotofelix/EQAi_Skills</span>
+<span class="adoption-link-action">최신 버전과 PR 보기 <span aria-hidden="true">→</span></span>
+<span class="sr-only">(새 탭에서 열림)</span>
+</a>
+</div>
+<p class="adoption-note">안내 사이트의 배포 파일과 GitHub의 최신 소스는 업데이트 시점이 다를 수 있습니다. 각 링크는 접근 권한에 따라 로그인 또는 초대가 필요할 수 있습니다.</p>
+</article>
+</section>
+
 <section aria-labelledby="page-title" class="hero shell">
 <div class="hero-copy">
 <p class="eyebrow">Integrated Access Point</p>
